@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="root" prefHeight="700.0" prefWidth="1000.0" stylesheets="@../../../styles/bootstrap.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <left>
+      <ScrollPane hbarPolicy="NEVER" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets right="10.0" />
+         </BorderPane.margin>
+         <content>
+            <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" spacing="30.0">
+               <children>
+                  <JFXButton fx:id="btNewArtist" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="40.0" prefHeight="40.0" styleClass="info" text="Add New Product" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" VBox.vgrow="NEVER">
+                     <children>
+                        <ImageView fx:id="ivPicture" fitHeight="100.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../images/item.png" />
+                           </image>
+                        </ImageView>
+                        <VBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <MFXButton fx:id="btSelectPicture" text="Select Picture" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <MFXTextField fx:id="tfArtistId" floatingText="Product ID" focusTraversable="false" prefColumnCount="20">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </MFXTextField>
+                  <MFXTextField fx:id="tfArtistName" floatingText="Product Name" layoutX="10.0" layoutY="10.0" prefColumnCount="20">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </MFXTextField>
+                  <MFXTextField fx:id="tfArtistShortcut" floatingText="Quantity" layoutX="10.0" layoutY="35.0" prefColumnCount="20">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </MFXTextField>
+                  <MFXTextField fx:id="tfArtistShortcut1" floatingText="Purchase Price" layoutX="10.0" layoutY="350.0" prefColumnCount="20">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </MFXTextField>
+                  <MFXTextField fx:id="tfArtistShortcut11" floatingText="Sale Price" prefColumnCount="20">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </MFXTextField>
+                  <JFXButton fx:id="btArtistAdd" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="success" text="Add" />
+                  <HBox fx:id="updateLayout" spacing="10.0" visible="false">
+                     <children>
+                        <JFXButton fx:id="btArtistDelete" maxWidth="1.7976931348623157E308" prefHeight="40.0" styleClass="danger" text="Delete" HBox.hgrow="ALWAYS" />
+                        <JFXButton fx:id="btArtistUpdate" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" prefHeight="40.0" styleClass="success" text="Update" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </content>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </ScrollPane>
+   </left>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefWidth="200.0" spacing="5.0">
+               <children>
+                  <TextField fx:id="byName" layoutX="10.0" layoutY="10.0" promptText="Filter by Name" HBox.hgrow="NEVER" />
+                  <TextField fx:id="byName1" promptText="Filter by Description" />
+               </children>
+            </HBox>
+            <TableView fx:id="tableArtist" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+              <columns>
+                <TableColumn fx:id="colArtistId" prefWidth="75.0" text="ID" />
+                <TableColumn fx:id="colArtistName" prefWidth="75.0" text="Name" />
+                  <TableColumn fx:id="colArtistShortcut" prefWidth="75.0" text="Shortcut" />
+                  <TableColumn fx:id="colArtistGender" prefWidth="75.0" text="Gender" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+         </children>
+      </VBox>
+   </center>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</BorderPane>
