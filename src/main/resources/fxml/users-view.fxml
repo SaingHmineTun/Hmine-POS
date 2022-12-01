@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="root" prefHeight="700.0" prefWidth="1000.0" stylesheets="@../styles/bootstrap.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@../styles/bootstrap.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hminepos.controller.UserController">
    <left>
-      <ScrollPane hbarPolicy="NEVER" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+      <ScrollPane hbarPolicy="NEVER" styleClass="editor" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
          <content>
-            <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" spacing="30.0">
+            <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" spacing="30.0" styleClass="bg-light">
                <children>
-                  <JFXButton fx:id="btNewArtist" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="40.0" prefHeight="40.0" text="Add New User">
+                  <JFXButton focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="40.0" onAction="#handleAddNewUser" prefHeight="40.0" text="Add New User">
                      <styleClass>
                         <String fx:value="info" />
                         <String fx:value="f-big" />
@@ -29,46 +37,46 @@
                         </ImageView>
                         <VBox alignment="CENTER" spacing="10.0">
                            <children>
-                              <MFXButton fx:id="btSelectPicture" text="Select Picture" />
+                              <MFXButton onAction="#handleSelectPicture" text="Select Picture" />
                            </children>
                         </VBox>
                      </children>
                   </HBox>
-                  <MFXTextField fx:id="tfArtistId" floatingText="User ID" focusTraversable="false" prefColumnCount="20">
+                  <MFXTextField fx:id="tfUserId" floatingText="User ID" focusTraversable="false" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
                   </MFXTextField>
-                  <MFXTextField fx:id="tfArtistName" floatingText="User Name" layoutX="10.0" layoutY="10.0" prefColumnCount="20">
+                  <MFXTextField fx:id="tfUserName" floatingText="User Name" layoutX="10.0" layoutY="10.0" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
                   </MFXTextField>
-                  <MFXTextField fx:id="tfArtistName1" floatingText="Phone" prefColumnCount="20">
+                  <MFXTextField fx:id="tfPhone" floatingText="Phone" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
                   </MFXTextField>
-                  <MFXTextField fx:id="tfArtistName12" floatingText="Email" layoutX="10.0" layoutY="386.0" prefColumnCount="20">
+                  <MFXTextField fx:id="tfEmail" floatingText="Email" layoutX="10.0" layoutY="386.0" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
                   </MFXTextField>
-                  <MFXTextField fx:id="tfArtistShortcut" floatingText="Password" layoutX="10.0" layoutY="35.0" prefColumnCount="20">
+                  <MFXPasswordField fx:id="pfPassword" floatingText="Password" layoutX="10.0" layoutY="35.0" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
-                  </MFXTextField>
-                  <MFXTextField fx:id="tfArtistShortcut1" floatingText="Confirm Password" layoutX="10.0" layoutY="350.0" prefColumnCount="20">
+                  </MFXPasswordField>
+                  <MFXPasswordField fx:id="pfConfirmPassword" floatingText="Confirm Password" layoutX="10.0" layoutY="350.0" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
-                  </MFXTextField>
-                  <JFXButton fx:id="btArtistAdd" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="success" text="Add" />
+                  </MFXPasswordField>
+                  <JFXButton fx:id="btAddUser" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#handleAddUser" prefHeight="40.0" prefWidth="100.0" styleClass="success" text="Add" />
                   <HBox fx:id="updateLayout" spacing="10.0" visible="false">
                      <children>
-                        <JFXButton fx:id="btArtistDelete" maxWidth="1.7976931348623157E308" prefHeight="40.0" styleClass="danger" text="Delete" HBox.hgrow="ALWAYS" />
-                        <JFXButton fx:id="btArtistUpdate" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" prefHeight="40.0" styleClass="success" text="Update" HBox.hgrow="ALWAYS" />
+                        <JFXButton maxWidth="1.7976931348623157E308" onAction="#handleUpdateUser" prefHeight="40.0" styleClass="danger" text="Delete" HBox.hgrow="ALWAYS" />
+                        <JFXButton layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" onAction="#handleDeleteUser" prefHeight="40.0" styleClass="success" text="Update" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -88,18 +96,18 @@
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefWidth="200.0" spacing="5.0">
+            <HBox spacing="5.0">
                <children>
-                  <TextField fx:id="byName" layoutX="10.0" layoutY="10.0" promptText="Filter by User ID" HBox.hgrow="NEVER" />
-                  <TextField fx:id="byName1" promptText="Filter by User Name" />
+                  <TextField fx:id="tfFilterById" layoutX="10.0" layoutY="10.0" prefColumnCount="10" promptText="Filter by User ID" />
+                  <TextField fx:id="tfFilterByName" prefColumnCount="10" promptText="Filter by User Name" />
                </children>
             </HBox>
-            <TableView fx:id="tableArtist" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+            <TableView fx:id="tableUsers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
               <columns>
-                <TableColumn fx:id="colArtistId" prefWidth="75.0" text="User ID" />
-                <TableColumn fx:id="colArtistName" prefWidth="75.0" text="User Name" />
-                  <TableColumn fx:id="colArtistShortcut" prefWidth="75.0" text="Phone" />
-                  <TableColumn fx:id="colArtistGender" prefWidth="75.0" text="Email" />
+                <TableColumn fx:id="colUserId" prefWidth="75.0" text="User ID" />
+                <TableColumn fx:id="colUserName" prefWidth="75.0" text="User Name" />
+                  <TableColumn fx:id="colPhone" prefWidth="75.0" text="Phone" />
+                  <TableColumn fx:id="colEmail" prefWidth="75.0" text="Email" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

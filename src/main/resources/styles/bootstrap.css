@@ -959,4 +959,11 @@ VBox > .split-menu-button.last > .arrow-button {
     -fx-font-size: 18px;
 }
 
+.editor {
+    -fx-background-color: #cccccc;
+    -fx-border-color: #999;
+}
 
+.bg-light {
+    -fx-background-color: #cccccc;
+}
