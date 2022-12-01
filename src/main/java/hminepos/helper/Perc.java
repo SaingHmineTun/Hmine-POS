@@ -1,4 +1,4 @@
-package it.saimao.hminepos;
+package hminepos.helper;
 
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;

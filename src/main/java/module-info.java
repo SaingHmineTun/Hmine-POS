@@ -6,6 +6,10 @@ module it.saimao.hminepos {
     requires org.kordamp.ikonli.javafx;
     requires java.desktop;
 
-    opens it.saimao.hminepos to javafx.fxml;
-    exports it.saimao.hminepos;
+    exports hminepos;
+    opens hminepos to javafx.fxml;
+    exports hminepos.controller;
+    opens hminepos.controller to javafx.fxml;
+    exports hminepos.helper;
+    opens hminepos.helper to javafx.fxml;
 }

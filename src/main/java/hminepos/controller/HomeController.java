@@ -1,16 +1,17 @@
-package it.saimao.hminepos;
+package hminepos.controller;
 
-import javafx.fxml.FXML;
+import hminepos.Main;
+import hminepos.helper.Perc;
+import hminepos.helper.Type;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static it.saimao.hminepos.Type.*;
+import static hminepos.helper.Type.*;
 
 public class HomeController {
 
@@ -34,20 +35,20 @@ public class HomeController {
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = null;
         if (type == USER) {
-            fxmlLoader = new FXMLLoader(Main.class.getResource("users-view.fxml"));
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/users-view.fxml"));
             stage.setTitle("Users");
         } else if (type == PRODUCT) {
-            fxmlLoader = new FXMLLoader(Main.class.getResource("products-view.fxml"));
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/products-view.fxml"));
             stage.setTitle("Products");
         } else if (type == CUSTOMER) {
 
-            fxmlLoader = new FXMLLoader(Main.class.getResource("customers-view.fxml"));
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/customers-view.fxml"));
             stage.setTitle("Customers");
         } else if (type == SUPPLIER) {
-            fxmlLoader = new FXMLLoader(Main.class.getResource("suppliers-view.fxml"));
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/suppliers-view.fxml"));
             stage.setTitle("Suppliers");
         }
-        Scene scene = new Scene(fxmlLoader.load(), Perc.getFullWidth(), Perc.getFullHeight());
+        Scene scene = new Scene(fxmlLoader.load(), Perc.getFullWidth(), Perc.p90h());
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.initModality(Modality.APPLICATION_MODAL);

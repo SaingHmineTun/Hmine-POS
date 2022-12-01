@@ -1,4 +1,4 @@
-package it.saimao.hminepos;
+package hminepos.helper;
 
 /**
  * Created by Mao on 11/30/2022.

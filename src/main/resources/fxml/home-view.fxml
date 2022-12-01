@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane stylesheets="@../../../styles/bootstrap3.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.saimao.hminepos.HomeController">
+<AnchorPane stylesheets="@../styles/bootstrap3.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hminepos.controller.HomeController">
    <children>
       <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -29,7 +29,7 @@
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../images/sales.png" />
+                              <Image url="@../images/sales.png" />
                            </image>
                         </ImageView>
                         <Label text="Sales" />
@@ -43,7 +43,7 @@
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../images/purchases.png" />
+                              <Image url="@../images/purchases.png" />
                            </image>
                         </ImageView>
                         <Label text="Purchases" />
@@ -57,7 +57,7 @@
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../images/customers.png" />
+                              <Image url="@../images/customers.png" />
                            </image>
                         </ImageView>
                         <Label text="Customers" />
@@ -71,7 +71,7 @@
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../images/suppliers.png" />
+                              <Image url="@../images/suppliers.png" />
                            </image>
                         </ImageView>
                         <Label text="Suppliers" />
@@ -85,7 +85,7 @@
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../images/items.png" />
+                              <Image url="@../images/items.png" />
                            </image>
                         </ImageView>
                         <Label text="Products" />
@@ -99,7 +99,7 @@
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../images/users.png" />
+                              <Image url="@../images/users.png" />
                            </image>
                         </ImageView>
                         <Label text="Users" />
@@ -113,7 +113,7 @@
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../images/history.png" />
+                              <Image url="@../images/history.png" />
                            </image>
                         </ImageView>
                         <Label text="History" />

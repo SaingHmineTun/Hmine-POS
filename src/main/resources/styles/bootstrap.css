@@ -955,4 +955,8 @@ VBox > .split-menu-button.last > .arrow-button {
 	-fx-background-color: rgba(160, 160, 160, 0.7);
 }
 
+.f-big {
+    -fx-font-size: 18px;
+}
+
 

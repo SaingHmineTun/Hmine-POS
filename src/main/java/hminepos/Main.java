@@ -1,4 +1,4 @@
-package it.saimao.hminepos;
+package hminepos;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("home-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Hmine POS");
         stage.setScene(scene);
