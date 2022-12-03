@@ -959,11 +959,14 @@ VBox > .split-menu-button.last > .arrow-button {
     -fx-font-size: 18px;
 }
 
-.editor {
-    -fx-background-color: #cccccc;
+.border-1 {
     -fx-border-color: #999;
 }
 
-.bg-light {
-    -fx-background-color: #cccccc;
+#tmk-bg {
+    -fx-background-image: url("thungmaokham.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
 }
+

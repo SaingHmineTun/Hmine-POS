@@ -4,7 +4,7 @@ module it.saimao.hminepos {
     requires javafx.swing;
 
     requires org.controlsfx.controls;
-    requires org.kordamp.ikonli.javafx;
+    requires org.xerial.sqlitejdbc;
     requires com.jfoenix;
     requires MaterialFX;
     requires java.desktop;
@@ -16,4 +16,6 @@ module it.saimao.hminepos {
     opens hminepos.controller to javafx.fxml;
     exports hminepos.helper;
     opens hminepos.helper to javafx.fxml;
+    exports hminepos.model;
+    opens hminepos.model to javafx.base;
 }

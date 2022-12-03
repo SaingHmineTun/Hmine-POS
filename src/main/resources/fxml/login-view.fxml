@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="536.0" prefWidth="620.0" stylesheets="@../styles/bootstrap.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hminepos.controller.LoginController">
+   <center>
+      <Pane id="tmk-bg" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

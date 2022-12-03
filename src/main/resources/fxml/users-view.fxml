@@ -9,7 +9,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -19,9 +18,9 @@
 
 <BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@../styles/bootstrap.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hminepos.controller.UserController">
    <left>
-      <ScrollPane hbarPolicy="NEVER" styleClass="editor" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+      <ScrollPane hbarPolicy="NEVER" styleClass="border-1" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
          <content>
-            <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" spacing="30.0" styleClass="bg-light">
+            <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" spacing="30.0">
                <children>
                   <JFXButton focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="40.0" onAction="#handleAddNewUser" prefHeight="40.0" text="Add New User">
                      <styleClass>
@@ -42,41 +41,36 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <MFXTextField fx:id="tfUserId" floatingText="User ID" focusTraversable="false" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
+                  <MFXTextField fx:id="tfUserId" floatMode="BORDER" floatingText="User ID" focusTraversable="false" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
                   </MFXTextField>
-                  <MFXTextField fx:id="tfUserName" floatingText="User Name" layoutX="10.0" layoutY="10.0" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
+                  <MFXTextField fx:id="tfUserName" floatMode="BORDER" floatingText="User Name" layoutX="10.0" layoutY="10.0" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
                   </MFXTextField>
-                  <MFXTextField fx:id="tfPhone" floatingText="Phone" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
+                  <MFXTextField fx:id="tfPhone" floatMode="BORDER" floatingText="Phone" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
                   </MFXTextField>
-                  <MFXTextField fx:id="tfEmail" floatingText="Email" layoutX="10.0" layoutY="386.0" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
+                  <MFXTextField fx:id="tfEmail" floatMode="BORDER" floatingText="Email" layoutX="10.0" layoutY="386.0" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
                   </MFXTextField>
-                  <MFXPasswordField fx:id="pfPassword" floatingText="Password" layoutX="10.0" layoutY="35.0" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </MFXPasswordField>
-                  <MFXPasswordField fx:id="pfConfirmPassword" floatingText="Confirm Password" layoutX="10.0" layoutY="350.0" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
+                  <MFXPasswordField fx:id="pfPassword" floatMode="BORDER" floatingText="Password" layoutX="10.0" layoutY="35.0" maxWidth="300.0" minWidth="300.0" prefColumnCount="20" prefWidth="300.0">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
                   </MFXPasswordField>
                   <JFXButton fx:id="btAddUser" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#handleAddUser" prefHeight="40.0" prefWidth="100.0" styleClass="success" text="Add" />
-                  <HBox fx:id="updateLayout" spacing="10.0" visible="false">
+                  <HBox fx:id="updateLayout" spacing="10.0">
                      <children>
-                        <JFXButton maxWidth="1.7976931348623157E308" onAction="#handleUpdateUser" prefHeight="40.0" styleClass="danger" text="Delete" HBox.hgrow="ALWAYS" />
-                        <JFXButton layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" onAction="#handleDeleteUser" prefHeight="40.0" styleClass="success" text="Update" HBox.hgrow="ALWAYS" />
+                        <JFXButton disable="true" managed="false" maxWidth="1.7976931348623157E308" onAction="#handleDeleteUser" prefHeight="40.0" styleClass="danger" text="Delete" visible="false" HBox.hgrow="ALWAYS" />
+                        <JFXButton layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" minHeight="40.0" onAction="#handleUpdateUser" prefHeight="40.0" styleClass="success" text="Update" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -96,10 +90,11 @@
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox spacing="5.0">
+            <HBox alignment="BASELINE_LEFT" spacing="10.0">
                <children>
-                  <TextField fx:id="tfFilterById" layoutX="10.0" layoutY="10.0" prefColumnCount="10" promptText="Filter by User ID" />
-                  <TextField fx:id="tfFilterByName" prefColumnCount="10" promptText="Filter by User Name" />
+                  <MFXTextField fx:id="tfFilterById" floatMode="BORDER" floatingText="Filter by User ID" layoutX="10.0" layoutY="10.0" prefColumnCount="10" />
+                  <MFXTextField fx:id="tfFilterByName" floatMode="BORDER" floatingText="Filter by User Name" prefColumnCount="10" />
+                  <MFXButton onAction="#handleClearFilter" styleClass="danger" text="Clear Filter" />
                </children>
             </HBox>
             <TableView fx:id="tableUsers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
