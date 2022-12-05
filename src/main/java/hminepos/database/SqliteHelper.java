@@ -108,5 +108,33 @@ public class SqliteHelper {
         return updatedRow > 0;
     }
 
+    public static UserModel getUserById(String userId) {
+        UserModel user = null;
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            String sql = "SELECT * FROM users WHERE user_id = ?";
+            PreparedStatement prep = con.prepareStatement(sql);
+            prep.setString(1, userId);
+            ResultSet res = prep.executeQuery();
+            if (res.next()) {
+                user = new UserModel();
+                user.setUserId(res.getString("user_id"));
+                user.setUserName(res.getString("user_name"));
+                user.setPhone(res.getString("phone"));
+                user.setEmail(res.getString("email"));
+                user.setPassword(res.getString("password"));
+                user.setImage(res.getString("image"));
+            }
+            res.close();
+            prep.close();
+            con.close();
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+        return user;
+    }
+
 
 }

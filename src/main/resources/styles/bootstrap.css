@@ -1,3 +1,5 @@
+@import 'MFXColors.css';
+
 @font-face {
     font-family: 'NamTeng Web Pro';
     src: url("shn.ttf");
@@ -955,6 +957,23 @@ VBox > .split-menu-button.last > .arrow-button {
 	-fx-background-color: rgba(160, 160, 160, 0.7);
 }
 
+
+/**************************************************
+ * Text Fields
+**************************************************/
+.mfx-text-field {
+	-fx-font-family: 'NamTeng Web Pro';
+	-fx-font-size: 16px;
+	-fx-border-color: -mfx-charcoal;
+	-fx-text-fill: #111;
+}
+
+.mfx-text-field .floating-text {
+	-fx-font-family: 'NamTeng Web Pro';
+	-fx-text-fill: -mfx-charcoal;
+}
+
+
 .f-big {
     -fx-font-size: 18px;
 }
@@ -963,10 +982,47 @@ VBox > .split-menu-button.last > .arrow-button {
     -fx-border-color: #999;
 }
 
-#tmk-bg {
-    -fx-background-image: url("thungmaokham.jpg");
+#login-bg {
+    -fx-background-image: url("login-bg.jpg");
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
 }
 
+#login-form {
+    -fx-background-color: #F5F5F5;
+}
+
+.fs-30 {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+.link-create-account {
+    -fx-text-fill: -mfx-green;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.link-create-account:hover {
+    -fx-underline: true;
+}
+
+.link-create-account:pressed {
+    -fx-text-fill: -mfx-blue;
+}
+
+.label-error {
+    -fx-text-fill: #F00;
+}
+
+.validatedField:invalid {
+	-fx-border-color: -mfx-red;
+}
+
+.validatedField:invalid .floating-text {
+	-fx-text-fill: -mfx-red;
+}
+
+.validatedField:invalid .mfx-font-icon {
+	-mfx-color: -mfx-red;
+}

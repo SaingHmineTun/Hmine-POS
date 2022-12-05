@@ -1,19 +1,34 @@
 package hminepos.controller;
 
 import hminepos.Main;
+import hminepos.helper.ImageEncoder;
 import hminepos.helper.Perc;
 import hminepos.helper.Type;
+import hminepos.helper.Utils;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import static hminepos.helper.Type.*;
 
-public class HomeController {
+public class HomeController implements Initializable {
+
+
+    @FXML
+    private ImageView ivCurrentUser;
+
+    @FXML
+    private Label lbCurrentUser;
 
     public void handle_sales(MouseEvent mouseEvent) {
     }
@@ -66,5 +81,11 @@ public class HomeController {
     public void handle_customers(MouseEvent mouseEvent) throws IOException {
         createStageFor(CUSTOMER).show();
 
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        ivCurrentUser.setImage(ImageEncoder.decodeToImage(Utils.getCurrentUser().getImage()));
+        lbCurrentUser.setText(Utils.getCurrentUserName());
     }
 }

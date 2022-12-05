@@ -9,16 +9,12 @@ import hminepos.helper.ImageResizer;
 import hminepos.model.UserModel;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import io.github.palexdev.materialfx.utils.BindingUtils;
-import io.github.palexdev.materialfx.validation.Constraint;
-import io.github.palexdev.materialfx.validation.Severity;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanExpression;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -91,6 +87,14 @@ public class UserController implements Initializable {
 
     @FXML
     private HBox updateLayout;
+    @FXML
+    private Label lbPassword;
+
+    @FXML
+    private Label lbUserId;
+
+    @FXML
+    private Label lbUserName;
 
     private ObservableList<UserModel> allUsers;
 
@@ -101,8 +105,36 @@ public class UserController implements Initializable {
         setupTableColumValueFactory();
         setupSelectTableRow();
         setupTableFiltering();
+        setupTextFieldListeners();
         allUsers = FXCollections.observableArrayList(SqliteHelper.getAllUsers());
         tableUsers.setItems(allUsers);
+    }
+
+    private void setupTextFieldListeners() {
+        tfUserId.textProperty().addListener(observable -> hidleErrorLabels());
+        tfUserName.textProperty().addListener(observable -> hidleErrorLabels());
+        tfEmail.textProperty().addListener(observable -> hidleErrorLabels());
+        tfPhone.textProperty().addListener(observable -> hidleErrorLabels());
+        pfPassword.textProperty().addListener(observable -> hidleErrorLabels());
+    }
+
+    private void hidleErrorLabels() {
+
+        if (lbUserId.isVisible()) {
+            lbUserId.setVisible(false);
+            lbUserId.setManaged(false);
+            tfUserId.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+        }
+        if (lbUserName.isVisible()) {
+            lbUserName.setVisible(false);
+            lbUserName.setManaged(false);
+            tfUserName.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+        }
+        if (lbPassword.isVisible()) {
+            lbPassword.setVisible(false);
+            lbPassword.setManaged(false);
+            pfPassword.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+        }
     }
 
     private void setupTableFiltering() {
@@ -225,6 +257,41 @@ public class UserController implements Initializable {
 
     public void handleAddUser(ActionEvent actionEvent) throws IOException {
 
+        // User Id must not be empty
+        if (tfUserId.getText().length() == 0) {
+            tfUserId.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, true);
+            lbUserId.setText("User ID must not be empty!");
+            lbUserId.setVisible(true);
+            lbUserId.setManaged(true);
+            return;
+        }
+
+        // Check UserId, if already existed, it must fail to register!
+        if (SqliteHelper.getUserById(tfUserId.getText()) != null) {
+            tfUserId.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, true);
+            lbUserId.setText("User ID already existed!");
+            lbUserId.setVisible(true);
+            lbUserId.setManaged(true);
+            return;
+        }
+
+        // Username must not be empty!
+        if (tfUserName.getText().length() == 0) {
+            tfUserName.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, true);
+            lbUserName.setVisible(true);
+            lbUserName.setManaged(true);
+            return;
+        }
+
+        // Password must not be empty
+        if (pfPassword.getText().length() == 0) {
+            pfPassword.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, true);
+            lbPassword.setVisible(true);
+            lbPassword.setManaged(true);
+            return;
+        }
+
+        // Safe to register!!!
         UserModel user = new UserModel();
         user.setUserId(tfUserId.getText());
         user.setUserName(tfUserName.getText());
@@ -243,7 +310,7 @@ public class UserController implements Initializable {
         /*
         UserModel object is ready! Let's add to the database!!!
          */
-        System.out.println(user);
+        SqliteHelper.addUser(user);
         refreshTable();
 
     }
