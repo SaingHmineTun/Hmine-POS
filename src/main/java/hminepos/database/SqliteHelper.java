@@ -1,5 +1,8 @@
 package hminepos.database;
 
+import hminepos.model.CustomerModel;
+import hminepos.model.ProductModel;
+import hminepos.model.SupplierModel;
 import hminepos.model.UserModel;
 
 import java.sql.*;
@@ -24,6 +27,9 @@ public class SqliteHelper {
 
     }
 
+    /*
+    Started : User SCOPE
+     */
     public static List<UserModel> getAllUsers() {
         List<UserModel> allUsers = new ArrayList<>();
         try {
@@ -136,5 +142,278 @@ public class SqliteHelper {
         return user;
     }
 
+    /////// Ended : User SCOPE
 
+    /* Customer SCOPE */
+
+    public static List<CustomerModel> getAllCustomers() {
+        List<CustomerModel> allCustomers = new ArrayList<>();
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            String sql = "SELECT * FROM customers;";
+            PreparedStatement prep = con.prepareStatement(sql);
+            ResultSet res = prep.executeQuery();
+            while (res.next()) {
+                CustomerModel customer = new CustomerModel();
+                customer.setCustomerId(res.getString("customer_id"));
+                customer.setCustomerName(res.getString("customer_name"));
+                customer.setPhone(res.getString("phone"));
+                customer.setEmail(res.getString("email"));
+                customer.setAddress(res.getString("address"));
+                customer.setImage(res.getString("image"));
+                customer.setCreatedBy(res.getString("created_by"));
+                customer.setCreatedAt(res.getString("created_at"));
+                allCustomers.add(customer);
+            }
+            res.close();
+            prep.close();
+            con.close();
+        } catch (SQLException | ClassNotFoundException throwable) {
+            throwable.printStackTrace();
+        }
+        return allCustomers;
+    }
+
+    public static boolean addCustomer(CustomerModel customer) {
+
+        String sql = "INSERT INTO customers (customer_id,customer_name,address,phone,email,image,created_by,created_at) VALUES(?,?,?,?,?,?,?,?);";
+
+        int addedRow = 0;
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, customer.getCustomerId());
+            pstmt.setString(2, customer.getCustomerName());
+            pstmt.setString(3, customer.getAddress());
+            pstmt.setString(4, customer.getPhone());
+            pstmt.setString(5, customer.getEmail());
+            pstmt.setString(6, customer.getImage());
+            pstmt.setString(7, customer.getCreatedBy());
+            pstmt.setString(8, customer.getCreatedAt());
+            addedRow = pstmt.executeUpdate();
+            pstmt.close();
+            con.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return addedRow > 0;
+    }
+
+    public static boolean updateCustomer(CustomerModel customer) {
+        String sql = "UPDATE customers SET customer_name=?,address=?,phone=?,email=?,image=? WHERE customer_id=?";
+
+        int updatedRow = 0;
+
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            // set the corresponding param
+            pstmt.setString(1, customer.getCustomerName());
+            pstmt.setString(2, customer.getAddress());
+            pstmt.setString(3, customer.getPhone());
+            pstmt.setString(4, customer.getEmail());
+            pstmt.setString(5, customer.getImage());
+            pstmt.setString(6, customer.getCustomerId());
+            // update
+            updatedRow = pstmt.executeUpdate();
+            pstmt.close();
+            con.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return updatedRow > 0;
+    }
+
+
+
+    /////////// END Customer SCOPE /////////////////
+
+    /* STARTED Supplier Scope */
+    public static List<SupplierModel> getAllSuppliers() {
+        List<SupplierModel> allSuppliers = new ArrayList<>();
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            String sql = "SELECT * FROM suppliers;";
+            PreparedStatement prep = con.prepareStatement(sql);
+            ResultSet res = prep.executeQuery();
+            while (res.next()) {
+                SupplierModel supplier = new SupplierModel();
+                supplier.setSupplierId(res.getString("supplier_id"));
+                supplier.setSupplierName(res.getString("supplier_name"));
+                supplier.setAddress(res.getString("address"));
+                supplier.setPhone(res.getString("phone"));
+                supplier.setEmail(res.getString("email"));
+                supplier.setImage(res.getString("image"));
+                supplier.setCreatedBy(res.getString("created_by"));
+                supplier.setCreatedAt(res.getString("created_at"));
+                allSuppliers.add(supplier);
+            }
+            res.close();
+            prep.close();
+            con.close();
+        } catch (SQLException | ClassNotFoundException throwable) {
+            throwable.printStackTrace();
+        }
+        return allSuppliers;
+    }
+
+    public static boolean addSupplier(SupplierModel supplier) {
+
+        String sql = "INSERT INTO suppliers (supplier_id,supplier_name,address,phone,email,image,created_by,created_at) VALUES(?,?,?,?,?,?,?,?);";
+
+        int addedRow = 0;
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, supplier.getSupplierId());
+            pstmt.setString(2, supplier.getSupplierName());
+            pstmt.setString(3, supplier.getAddress());
+            pstmt.setString(4, supplier.getPhone());
+            pstmt.setString(5, supplier.getEmail());
+            pstmt.setString(6, supplier.getImage());
+            pstmt.setString(7, supplier.getCreatedBy());
+            pstmt.setString(8, supplier.getCreatedAt());
+            addedRow = pstmt.executeUpdate();
+            pstmt.close();
+            con.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return addedRow > 0;
+    }
+
+    public static boolean updateSupplier(SupplierModel supplier) {
+        String sql = "UPDATE suppliers SET supplier_name=?,address=?,phone=?,email=?,image=? WHERE supplier_id=?";
+
+        int updatedRow = 0;
+
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            // set the corresponding param
+            pstmt.setString(1, supplier.getSupplierName());
+            pstmt.setString(2, supplier.getAddress());
+            pstmt.setString(3, supplier.getPhone());
+            pstmt.setString(4, supplier.getEmail());
+            pstmt.setString(5, supplier.getImage());
+            pstmt.setString(6, supplier.getSupplierId());
+            // update
+            updatedRow = pstmt.executeUpdate();
+            pstmt.close();
+            con.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return updatedRow > 0;
+    }
+
+
+    // STARTED PRODUCT SCOPE //
+    public static List<ProductModel> getAllProducts() {
+        List<ProductModel> allProducts = new ArrayList<>();
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            String sql = "SELECT * FROM products;";
+            PreparedStatement prep = con.prepareStatement(sql);
+            ResultSet res = prep.executeQuery();
+            while (res.next()) {
+                ProductModel product = new ProductModel();
+                product.setProductId(res.getString("product_id"));
+                product.setProductName(res.getString("product_name"));
+                product.setQuantity(res.getInt("quantity"));
+                product.setPurchasePrice(res.getDouble("purchase_price"));
+                product.setSalePrice(res.getDouble("sale_price"));
+                product.setImage(res.getString("image"));
+                product.setCreatedBy(res.getString("created_by"));
+                product.setCreatedAt(res.getString("created_at"));
+                allProducts.add(product);
+            }
+            res.close();
+            prep.close();
+            con.close();
+        } catch (SQLException | ClassNotFoundException throwable) {
+            throwable.printStackTrace();
+        }
+        return allProducts;
+    }
+
+    public static boolean addProduct(ProductModel product) {
+
+        String sql = "INSERT INTO products (product_id,product_name,quantity,purchase_price,sale_price,image,created_by,created_at) VALUES(?,?,?,?,?,?,?,?);";
+
+        int addedRow = 0;
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, product.getProductId());
+            pstmt.setString(2, product.getProductName());
+            pstmt.setInt(3, product.getQuantity());
+            pstmt.setDouble(4, product.getPurchasePrice());
+            pstmt.setDouble(5, product.getSalePrice());
+            pstmt.setString(6, product.getImage());
+            pstmt.setString(7, product.getCreatedBy());
+            pstmt.setString(8, product.getCreatedAt());
+            addedRow = pstmt.executeUpdate();
+            pstmt.close();
+            con.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return addedRow > 0;
+    }
+
+    public static boolean updateProduct(ProductModel product) {
+        String sql = "UPDATE products SET product_name=?,quantity=?,purchase_price=?,sale_price=?,image=? WHERE product_id=?";
+
+        int updatedRow = 0;
+
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            // set the corresponding param
+            pstmt.setString(1, product.getProductName());
+            pstmt.setInt(2, product.getQuantity());
+            pstmt.setDouble(3, product.getPurchasePrice());
+            pstmt.setDouble(4, product.getSalePrice());
+            pstmt.setString(5, product.getImage());
+            pstmt.setString(6, product.getProductId());
+            // update
+            updatedRow = pstmt.executeUpdate();
+            pstmt.close();
+            con.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return updatedRow > 0;
+    }
 }

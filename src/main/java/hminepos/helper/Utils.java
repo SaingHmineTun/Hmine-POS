@@ -2,6 +2,7 @@ package hminepos.helper;
 
 import com.password4j.Password;
 import hminepos.model.UserModel;
+import javafx.scene.image.Image;
 
 /**
  * Created by Mao on 12/1/2022.
@@ -31,6 +32,13 @@ public class Utils {
     public static boolean checkPassword(String hashPassword, String yourPassword) {
 
         return Password.check(yourPassword, hashPassword).withArgon2();
+    }
+    public static Image getDefaultUserImage() {
+        return new Image(Utils.class.getResource("/images/user.png").toExternalForm());
+    }
+
+    public static Image getDefaultProductImage() {
+        return new Image(Utils.class.getResource("/images/item.png").toExternalForm());
     }
 
 }

@@ -6,6 +6,7 @@ import com.password4j.Password;
 import hminepos.database.SqliteHelper;
 import hminepos.helper.ImageEncoder;
 import hminepos.helper.ImageResizer;
+import hminepos.helper.Utils;
 import hminepos.model.UserModel;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -111,14 +112,14 @@ public class UserController implements Initializable {
     }
 
     private void setupTextFieldListeners() {
-        tfUserId.textProperty().addListener(observable -> hidleErrorLabels());
-        tfUserName.textProperty().addListener(observable -> hidleErrorLabels());
-        tfEmail.textProperty().addListener(observable -> hidleErrorLabels());
-        tfPhone.textProperty().addListener(observable -> hidleErrorLabels());
-        pfPassword.textProperty().addListener(observable -> hidleErrorLabels());
+        tfUserId.textProperty().addListener(observable -> hideErrorLabels());
+        tfUserName.textProperty().addListener(observable -> hideErrorLabels());
+        tfEmail.textProperty().addListener(observable -> hideErrorLabels());
+        tfPhone.textProperty().addListener(observable -> hideErrorLabels());
+        pfPassword.textProperty().addListener(observable -> hideErrorLabels());
     }
 
-    private void hidleErrorLabels() {
+    private void hideErrorLabels() {
 
         if (lbUserId.isVisible()) {
             lbUserId.setVisible(false);
@@ -185,18 +186,15 @@ public class UserController implements Initializable {
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
     }
-
-    private int selectedIndex;
     private boolean isUpdatedPicture;
     private UserModel currentUser;
 
     private void setupSelectTableRow() {
-        tableUsers.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+        tableUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
-            if (newValue == null || newValue.intValue() < 0) return;
-            selectedIndex = newValue.intValue();
+            if (newValue == null) return;
             isUpdatedPicture = false;
-            currentUser = allUsers.get(selectedIndex);
+            currentUser = newValue;
             tfUserId.setText(currentUser.getUserId());
             tfUserName.setText(currentUser.getUserName());
             tfEmail.setText(currentUser.getEmail());
@@ -204,7 +202,7 @@ public class UserController implements Initializable {
             if (currentUser.getImage() != null && currentUser.getImage().length() > 0) {
                 ivPicture.setImage(ImageEncoder.decodeToImage(currentUser.getImage()));
             } else {
-                ivPicture.setImage(getDefaultImage());
+                ivPicture.setImage(Utils.getDefaultUserImage());
             }
 
             hideUpdateLayout(false);
@@ -224,7 +222,7 @@ public class UserController implements Initializable {
         tfEmail.clear();
         tfPhone.clear();
         pfPassword.clear();
-        ivPicture.setImage(getDefaultImage());
+        ivPicture.setImage(Utils.getDefaultUserImage());
         hideUpdateLayout(true);
         tableUsers.getSelectionModel().clearSelection();
 
@@ -336,10 +334,6 @@ public class UserController implements Initializable {
 
 
     public void handleDeleteUser(ActionEvent actionEvent) {
-    }
-
-    public Image getDefaultImage() {
-        return new Image(getClass().getResource("/images/user.png").toExternalForm());
     }
 
     private void refreshTable() {

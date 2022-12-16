@@ -17,6 +17,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.TextField?>
 <BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@../styles/bootstrap.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hminepos.controller.UserController">
    <left>
       <ScrollPane hbarPolicy="NEVER" styleClass="border-1" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
@@ -120,8 +121,8 @@
          <children>
             <HBox alignment="BASELINE_LEFT" spacing="10.0">
                <children>
-                  <MFXTextField fx:id="tfFilterById" floatMode="BORDER" floatingText="Filter by User ID" layoutX="10.0" layoutY="10.0" prefColumnCount="10" />
-                  <MFXTextField fx:id="tfFilterByName" floatMode="BORDER" floatingText="Filter by User Name" prefColumnCount="10" />
+                  <TextField fx:id="tfFilterById" promptText="Filter by User ID" layoutX="10.0" layoutY="10.0" prefColumnCount="10" />
+                  <TextField fx:id="tfFilterByName" promptText="Filter by User Name" prefColumnCount="10" />
                   <MFXButton onAction="#handleClearFilter" styleClass="danger" text="Clear Filter" />
                </children>
             </HBox>
