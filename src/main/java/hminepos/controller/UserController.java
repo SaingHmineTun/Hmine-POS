@@ -241,18 +241,6 @@ public class UserController implements Initializable {
         isUpdatedPicture = true;
     }
 
-    private String resizeImage() throws IOException {
-        String inputUrl = ivPicture.getImage().getUrl();
-        String outputUrl = inputUrl.substring(0, inputUrl.lastIndexOf('.'));
-        String type = inputUrl.substring(inputUrl.lastIndexOf(".") + 1);
-        outputUrl = outputUrl + "_compressed." + type;
-        ImageResizer.resize(inputUrl, outputUrl, 128, 128);
-        String resizedImage = ImageEncoder.encodeToString(new Image(outputUrl), type);
-        Files.deleteIfExists(Paths.get(outputUrl));
-        return resizedImage;
-    }
-
-
     public void handleAddUser(ActionEvent actionEvent) throws IOException {
 
         // User Id must not be empty
@@ -302,7 +290,7 @@ public class UserController implements Initializable {
         // Converting an image file to string
         if (!ivPicture.getImage().getUrl().endsWith("images/user.png")) {
             // Resize image to 128w/128h
-            user.setImage(resizeImage());
+            user.setImage(Utils.resizeImage(ivPicture.getImage().getUrl()));
         }
 
         /*
@@ -321,7 +309,7 @@ public class UserController implements Initializable {
         user.setPhone(tfPhone.getText());
         user.setEmail(tfEmail.getText());
         if (isUpdatedPicture) {
-            user.setImage(resizeImage());
+            user.setImage(Utils.resizeImage(ivPicture.getImage().getUrl()));
         } else {
             user.setImage(currentUser.getImage());
         }

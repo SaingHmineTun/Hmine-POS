@@ -30,7 +30,8 @@ public class HomeController implements Initializable {
     @FXML
     private Label lbCurrentUser;
 
-    public void handle_sales(MouseEvent mouseEvent) {
+    public void handle_sales(MouseEvent mouseEvent) throws IOException {
+        createStageFor(SALE).show();
     }
 
     public void handle_purchases(MouseEvent mouseEvent) {
@@ -56,12 +57,14 @@ public class HomeController implements Initializable {
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/products-view.fxml"));
             stage.setTitle("Products");
         } else if (type == CUSTOMER) {
-
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/customers-view.fxml"));
             stage.setTitle("Customers");
         } else if (type == SUPPLIER) {
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/suppliers-view.fxml"));
             stage.setTitle("Suppliers");
+        } else if (type == SALE) {
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/sales.fxml"));
+            stage.setTitle("Sales");
         }
         Scene scene = new Scene(fxmlLoader.load(), Perc.getFullWidth(), Perc.p90h());
         stage.setScene(scene);
@@ -85,7 +88,8 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ivCurrentUser.setImage(ImageEncoder.decodeToImage(Utils.getCurrentUser().getImage()));
+        if (Utils.getCurrentUser().getImage() != null && Utils.getCurrentUser().getImage().length() > 0)
+            ivCurrentUser.setImage(ImageEncoder.decodeToImage(Utils.getCurrentUser().getImage()));
         lbCurrentUser.setText(Utils.getCurrentUserName());
     }
 }

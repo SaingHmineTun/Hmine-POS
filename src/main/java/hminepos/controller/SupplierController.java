@@ -133,7 +133,7 @@ public class SupplierController implements Initializable {
         supplier.setPhone(tfPhone.getText());
         supplier.setEmail(tfEmail.getText());
         if (isUpdatedPicture) {
-            supplier.setImage(resizeImage());
+            supplier.setImage(Utils.resizeImage(ivPicture.getImage().getUrl()));
         } else {
             supplier.setImage(selectedSupplier.getImage());
         }
@@ -242,7 +242,7 @@ public class SupplierController implements Initializable {
         // Converting an image file to string
         if (!ivPicture.getImage().getUrl().endsWith("images/user.png")) {
             // Resize image to 128w/128h
-            supplier.setImage(resizeImage());
+            supplier.setImage(Utils.resizeImage(ivPicture.getImage().getUrl()));
         }
         // Created By
         supplier.setCreatedBy(Utils.getCurrentUserId());
@@ -259,17 +259,6 @@ public class SupplierController implements Initializable {
     private void refreshTable() {
         allSuppliers = FXCollections.observableArrayList(SqliteHelper.getAllSuppliers());
         tableSuppliers.setItems(allSuppliers);
-    }
-
-    private String resizeImage() throws IOException {
-        String inputUrl = ivPicture.getImage().getUrl();
-        String outputUrl = inputUrl.substring(0, inputUrl.lastIndexOf('.'));
-        String type = inputUrl.substring(inputUrl.lastIndexOf(".") + 1);
-        outputUrl = outputUrl + "_compressed." + type;
-        ImageResizer.resize(inputUrl, outputUrl, 128, 128);
-        String resizedImage = ImageEncoder.encodeToString(new Image(outputUrl), type);
-        Files.deleteIfExists(Paths.get(outputUrl));
-        return resizedImage;
     }
 
     public void handleClearFilter(ActionEvent actionEvent) {

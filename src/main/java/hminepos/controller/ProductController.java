@@ -124,9 +124,9 @@ public class ProductController implements Initializable {
         product.setPurchasePrice(Double.parseDouble(tfPurchasePrice.getText()));
         product.setSalePrice(Double.parseDouble(tfSalePrice.getText()));
         // Converting an image file to string
-        if (!ivPicture.getImage().getUrl().endsWith("images/user.png")) {
+        if (!ivPicture.getImage().getUrl().endsWith("images/item.png")) {
             // Resize image to 128w/128h
-            product.setImage(resizeImage());
+            product.setImage(Utils.resizeImage(ivPicture.getImage().getUrl()));
         }
         // Created By
         product.setCreatedBy(Utils.getCurrentUserId());
@@ -175,7 +175,7 @@ public class ProductController implements Initializable {
         product.setPurchasePrice(Double.parseDouble(tfPurchasePrice.getText()));
         product.setSalePrice(Double.parseDouble(tfSalePrice.getText()));
         if (isUpdatedPicture) {
-            product.setImage(resizeImage());
+            product.setImage(Utils.resizeImage(ivPicture.getImage().getUrl()));
         } else {
             product.setImage(selectedProduct.getImage());
         }
@@ -269,17 +269,6 @@ public class ProductController implements Initializable {
             btAddProduct.setManaged(false);
             tfProductId.setEditable(false);
         }
-    }
-
-    private String resizeImage() throws IOException {
-        String inputUrl = ivPicture.getImage().getUrl();
-        String outputUrl = inputUrl.substring(0, inputUrl.lastIndexOf('.'));
-        String type = inputUrl.substring(inputUrl.lastIndexOf(".") + 1);
-        outputUrl = outputUrl + "_compressed." + type;
-        ImageResizer.resize(inputUrl, outputUrl, 128, 128);
-        String resizedImage = ImageEncoder.encodeToString(new Image(outputUrl), type);
-        Files.deleteIfExists(Paths.get(outputUrl));
-        return resizedImage;
     }
 
 

@@ -74,8 +74,7 @@ public class LoginController implements Initializable {
             return;
         }
         if (Utils.checkPassword(user.getPassword(), password)) {
-            // Login Success!!!
-
+            // This is Login Success!!!
             Utils.setCurrentUser(user);
 
             Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();

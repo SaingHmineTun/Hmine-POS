@@ -226,7 +226,7 @@ public class CustomerController implements Initializable {
         // Converting an image file to string
         if (!ivPicture.getImage().getUrl().endsWith("images/user.png")) {
             // Resize image to 128w/128h
-            customer.setImage(resizeImage());
+            customer.setImage(Utils.resizeImage(ivPicture.getImage().getUrl()));
         }
         // Created By
         customer.setCreatedBy(Utils.getCurrentUserId());
@@ -238,17 +238,6 @@ public class CustomerController implements Initializable {
          */
         SqliteHelper.addCustomer(customer);
         refreshTable();
-    }
-
-    private String resizeImage() throws IOException {
-        String inputUrl = ivPicture.getImage().getUrl();
-        String outputUrl = inputUrl.substring(0, inputUrl.lastIndexOf('.'));
-        String type = inputUrl.substring(inputUrl.lastIndexOf(".") + 1);
-        outputUrl = outputUrl + "_compressed." + type;
-        ImageResizer.resize(inputUrl, outputUrl, 128, 128);
-        String resizedImage = ImageEncoder.encodeToString(new Image(outputUrl), type);
-        Files.deleteIfExists(Paths.get(outputUrl));
-        return resizedImage;
     }
 
     private void refreshTable() {
@@ -264,7 +253,7 @@ public class CustomerController implements Initializable {
         customer.setPhone(tfPhone.getText());
         customer.setEmail(tfEmail.getText());
         if (isUpdatedPicture) {
-            customer.setImage(resizeImage());
+            customer.setImage(Utils.resizeImage(ivPicture.getImage().getUrl()));
         } else {
             customer.setImage(selectedCustomer.getImage());
         }
@@ -281,7 +270,6 @@ public class CustomerController implements Initializable {
                 || !selectedCustomer.getAddress().equals(customer.getAddress())
                 || !selectedCustomer.getEmail().equals(customer.getEmail());
     }
-
 
     public void handleClearFilter(ActionEvent actionEvent) {
         tfFCustomerId.clear();

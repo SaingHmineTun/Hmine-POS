@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import javafx.geometry.Insets?>
+<HBox prefHeight="40.0" fx:controller="hminepos.controller.FooterController" prefWidth="200.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+            <children>
+                <Label fx:id="user" minHeight="40.0" minWidth="75.0" prefHeight="40.0" text="Login as" />
+                <Label fx:id="userName" layoutX="10.0" layoutY="22.0" prefHeight="40.0" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+            <children>
+                <Label fx:id="date" alignment="CENTER" prefHeight="40.0">
+                    <HBox.margin>
+                        <Insets right="10.0" />
+                    </HBox.margin>
+                </Label>
+                <HBox fx:id="time" alignment="CENTER" prefHeight="40.0" />
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets left="10.0" right="10.0" />
+    </padding>
+</HBox>
