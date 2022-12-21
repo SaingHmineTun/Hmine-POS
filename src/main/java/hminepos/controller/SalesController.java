@@ -108,7 +108,10 @@ public class SalesController implements Initializable {
             sale.setCreatedBy(Utils.getCurrentUserId());
             sale.setCustomerId(cbCustomerId.getValue() == null ? "" : cbCustomerId.getValue().getCustomerId());
             System.out.println(sale);
-            SqliteHelper.addSales(sale);
+            // #1 Subtract quantity from products table
+            if (SqliteHelper.subtractProducts(sale))
+                // #2 Add the record to the sales table
+                SqliteHelper.addSales(sale);
         }
         // After finishing adding all items, close the connection!
         SqliteHelper.closeConnection();
@@ -128,6 +131,9 @@ public class SalesController implements Initializable {
         vcTotalQuantity.setText("0");
         tfVoucherNo.setText(getVoucherNumber());
         btSell.setDisable(true);
+        // After finish selling one time, to get the remaining quantity of our products
+        // We must refresh cbProductId once again!!!
+        cbProductId.setItems(FXCollections.observableArrayList(SqliteHelper.getAllProducts()));
     }
 
 
@@ -171,10 +177,17 @@ public class SalesController implements Initializable {
             }
         }));
         colQuantity.setOnEditCommit(event -> {
-            event.getTableView().getItems().get(event.getTablePosition().getRow()).setQuantity(event.getNewValue());
-            event.getTableView().getItems().get(event.getTablePosition().getRow()).setAmount(event.getNewValue() * event.getTableView().getItems().get(event.getTablePosition().getRow()).getPrice());
-            vcCalculator();
-            tableview.refresh();
+            SalesModel tmp = event.getTableView().getItems().get(event.getTablePosition().getRow());
+            if (event.getNewValue() <= tmp.getMaxQuantity()) {
+                tmp.setQuantity(event.getNewValue());
+                tmp.setAmount(event.getNewValue() * tmp.getPrice());
+                vcCalculator();
+                tableview.refresh();
+            } else {
+                // Not enough items
+                tmp.setQuantity(event.getOldValue());
+                tableview.refresh();
+            }
         });
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
@@ -198,7 +211,7 @@ public class SalesController implements Initializable {
     }
 
     private void initProducts() {
-        cbProductId.getItems().addAll(FXCollections.observableArrayList(SqliteHelper.getAllProducts()));
+        cbProductId.setItems(FXCollections.observableArrayList(SqliteHelper.getAllProducts()));
         Callback<ListView<ProductModel>, ListCell<ProductModel>> productCellFactory = new Callback<>() {
             @Override
             public ListCell<ProductModel> call(ListView<ProductModel> param) {
@@ -242,6 +255,7 @@ public class SalesController implements Initializable {
         salesModel.setProductId(product.getProductId());
         salesModel.setProductName(product.getProductName());
         salesModel.setQuantity(1);
+        salesModel.setMaxQuantity(product.getQuantity());
         salesModel.setPrice(product.getSalePrice());
         salesModel.setAmount(salesModel.getQuantity() * salesModel.getPrice());
         return salesModel;
@@ -276,6 +290,7 @@ public class SalesController implements Initializable {
                 tfCustomerName.clear();
         });
     }
+
     private String getVoucherNumber() throws ParseException {
         // Detect from Database here
         String theLastVoucherFromDatabase = SqliteHelper.getTheLastVoucher();

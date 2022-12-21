@@ -417,7 +417,7 @@ public class SqliteHelper {
 
     // Sales SCOPE!!!
     public static String getTheLastVoucher() {
-        String query = "SELECT voucher FROM sales GROUP BY voucher ORDER BY voucher DESC LIMIT 1;";
+        String query = "SELECT voucher FROM sales ORDER BY no DESC LIMIT 1;";
         // Initialize with today voucher number!
         String result = "s" + String.format("%04d", 1) + "-" + Utils.getTodayDate();
         try {
@@ -475,4 +475,27 @@ public class SqliteHelper {
         }
     }
 
+    public static boolean subtractProducts(SalesModel sale) {
+        String sql = "UPDATE products SET quantity=? WHERE product_id=?";
+        int updatedRow = 0;
+
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            // set the corresponding param
+            pstmt.setInt(1, (sale.getMaxQuantity() - sale.getQuantity()));
+            pstmt.setString(2, sale.getProductId());
+            // update
+            updatedRow = pstmt.executeUpdate();
+            pstmt.close();
+            con.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return updatedRow > 0;
+    }
 }

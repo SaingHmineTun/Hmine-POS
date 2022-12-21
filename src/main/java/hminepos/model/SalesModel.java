@@ -26,6 +26,16 @@ public class SalesModel {
 
     // Only necessary for showing data in tableview!!!
     private String productName;
+
+    public int getMaxQuantity() {
+        return maxQuantity;
+    }
+
+    public void setMaxQuantity(int maxQuantity) {
+        this.maxQuantity = maxQuantity;
+    }
+
+    private int maxQuantity;
     private double amount;
 
     public String getProductName() {
