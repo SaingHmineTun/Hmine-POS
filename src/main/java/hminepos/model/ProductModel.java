@@ -78,4 +78,14 @@ public class ProductModel {
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ProductModel) {
+            return ((ProductModel)obj).getProductId().equals(getProductId());
+        } else if (obj instanceof SalesModel) {
+            return ((SalesModel)obj).getProductId().equals(getProductId());
+        } return false;
+    }
 }

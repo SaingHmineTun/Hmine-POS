@@ -6,6 +6,16 @@ package hminepos.model;
 
 
 public class SalesModel {
+    private int no;
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
     private String voucher;
     private String productId;
     private String customerId;
@@ -14,8 +24,9 @@ public class SalesModel {
     private String createdBy;
     private String createdAt;
 
-    // Necessary for showing data in tableview
+    // Only necessary for showing data in tableview!!!
     private String productName;
+    private double amount;
 
     public String getProductName() {
         return productName;
@@ -32,8 +43,6 @@ public class SalesModel {
     public void setAmount(double amount) {
         this.amount = amount;
     }
-
-    private double amount;
 
     public String getVoucher() {
         return voucher;
@@ -89,5 +98,30 @@ public class SalesModel {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "SalesModel{" +
+                "no=" + no +
+                ", voucher='" + voucher + '\'' +
+                ", productId='" + productId + '\'' +
+                ", customerId='" + customerId + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", createdBy='" + createdBy + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", productName='" + productName + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ProductModel) {
+            return ((ProductModel)obj).getProductId().equals(getProductId());
+        } else if (obj instanceof SalesModel) {
+            return ((SalesModel)obj).getProductId().equals(getProductId());
+        } return false;
     }
 }

@@ -1,9 +1,7 @@
 package hminepos.database;
 
-import hminepos.model.CustomerModel;
-import hminepos.model.ProductModel;
-import hminepos.model.SupplierModel;
-import hminepos.model.UserModel;
+import hminepos.helper.Utils;
+import hminepos.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -416,4 +414,65 @@ public class SqliteHelper {
         }
         return updatedRow > 0;
     }
+
+    // Sales SCOPE!!!
+    public static String getTheLastVoucher() {
+        String query = "SELECT voucher FROM sales GROUP BY voucher ORDER BY voucher DESC LIMIT 1;";
+        // Initialize with today voucher number!
+        String result = "s" + String.format("%04d", 1) + "-" + Utils.getTodayDate();
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            PreparedStatement prep = con.prepareStatement(query);
+            ResultSet res = prep.executeQuery();
+            if (res.next()) {
+                result = res.getString("voucher");
+            }
+            res.close();
+            prep.close();
+            con.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    public static boolean addSales(SalesModel sale) {
+
+        String sql = "INSERT INTO sales (voucher,product_id,customer_id,quantity,price,created_by,created_at) VALUES(?,?,?,?,?,?,?);";
+
+        int addedRow = 0;
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, sale.getVoucher());
+            pstmt.setString(2, sale.getProductId());
+            pstmt.setString(3, sale.getCustomerId());
+            pstmt.setInt(4, sale.getQuantity());
+            pstmt.setDouble(5, sale.getPrice());
+            pstmt.setString(6, sale.getCreatedBy());
+            pstmt.setString(7, sale.getCreatedAt());
+            addedRow = pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return addedRow > 0;
+    }
+
+    public static void closeConnection() {
+        try {
+            if (!con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

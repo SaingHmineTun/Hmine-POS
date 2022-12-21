@@ -1,22 +1,29 @@
 package hminepos.controller;
 
 import hminepos.database.SqliteHelper;
+import hminepos.helper.Utils;
 import hminepos.model.CustomerModel;
 import hminepos.model.ProductModel;
 import hminepos.model.SalesModel;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
+import javafx.util.converter.DoubleStringConverter;
 import org.controlsfx.control.SearchableComboBox;
 
 import java.net.URL;
+import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 /**
  * Created by Mao on 12/17/2022.
@@ -54,6 +61,9 @@ public class SalesController implements Initializable {
     private Button handleQuantity;
 
     @FXML
+    private Button btSell;
+
+    @FXML
     private VBox printableVoucher;
 
     @FXML
@@ -86,8 +96,38 @@ public class SalesController implements Initializable {
     }
 
     @FXML
-    void handleSell(ActionEvent event) {
+    void handleSell(ActionEvent event) throws ParseException {
 
+        // Same data for all table items
+        // createdAt, voucher
+        String createdAt = LocalDateTime.now().toString();
+        for (SalesModel sale :
+                tableview.getItems()) {
+            sale.setVoucher(tfVoucherNo.getText());
+            sale.setCreatedAt(createdAt);
+            sale.setCreatedBy(Utils.getCurrentUserId());
+            sale.setCustomerId(cbCustomerId.getValue() == null ? "" : cbCustomerId.getValue().getCustomerId());
+            System.out.println(sale);
+            SqliteHelper.addSales(sale);
+        }
+        // After finishing adding all items, close the connection!
+        SqliteHelper.closeConnection();
+        prepareToSellAgain();
+
+    }
+
+    private void prepareToSellAgain() throws ParseException {
+        cbCustomerId.setValue(null);
+        cbProductId.setValue(null);
+        tfCustomerName.clear();
+        tfTotalAmount.clear();
+        tableview.getItems().clear();
+        vcCash.setText("0");
+        vcChange.setText("0");
+        vcTotalAmount.setText("0");
+        vcTotalQuantity.setText("0");
+        tfVoucherNo.setText(getVoucherNumber());
+        btSell.setDisable(true);
     }
 
 
@@ -95,6 +135,66 @@ public class SalesController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initCustomers();
         initProducts();
+        initVouchers();
+        setupTableColumValue();
+    }
+
+    // This method includes Voucher TextField & Voucher Report
+    private void initVouchers() {
+        try {
+            tfVoucherNo.setText(getVoucherNumber());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        TextFormatter<Double> doubleTextFormatter = new TextFormatter<>(
+                new DoubleStringConverter(),
+                0.0,
+                change -> Pattern.matches("\\d*", change.getText()) ? change : null
+        );
+        vcCash.setTextFormatter(doubleTextFormatter);
+        vcCash.textProperty().addListener(observable -> {
+            vcCalculator();
+        });
+    }
+
+    private void setupTableColumValue() {
+        colProductId.setCellValueFactory(new PropertyValueFactory<>("productId"));
+        colProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        colQuantity.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
+            public String toString(Integer object) {
+                return object.toString();
+            }
+
+            public Integer fromString(String string) {
+                return Integer.parseInt(string);
+            }
+        }));
+        colQuantity.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setQuantity(event.getNewValue());
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setAmount(event.getNewValue() * event.getTableView().getItems().get(event.getTablePosition().getRow()).getPrice());
+            vcCalculator();
+            tableview.refresh();
+        });
+        colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+    }
+
+    private void vcCalculator() {
+        vcTotalQuantity.setText("" + tableview.getItems().stream().mapToInt(SalesModel::getQuantity).sum());
+        vcTotalAmount.setText("" + tableview.getItems().stream().mapToDouble(SalesModel::getAmount).sum());
+        double change = (Double.parseDouble(vcCash.getText()) - Double.parseDouble(vcTotalAmount.getText()));
+        vcChange.setText("" + change);
+        if (change < 0) {
+            // Cannot sell Things
+            vcChange.setTextFill(Color.RED);
+            btSell.setDisable(true);
+        } else {
+            // Safe to Sell Things
+            vcChange.setTextFill(Color.GREEN);
+            btSell.setDisable(false);
+        }
+
     }
 
     private void initProducts() {
@@ -117,11 +217,34 @@ public class SalesController implements Initializable {
         };
         cbProductId.setCellFactory(productCellFactory);
         cbProductId.setButtonCell(productCellFactory.call(null));
-        cbProductId.getSelectionModel().selectedItemProperty().addListener(observable -> {
-            if (cbProductId.getValue() != null) {
-                // TODO: Set Table Values!!!
+        cbProductId.showingProperty().addListener((observable, hidden, showing) -> {
+            if (hidden) {
+                if (cbProductId.getValue() != null) {
+                    ProductModel newProduct = cbProductId.getValue();
+                    if (tableview.getItems().contains(newProduct)) {
+                        SalesModel existingProduct = tableview.getItems().stream().filter(pm -> pm.getProductId().equals(newProduct.getProductId())).findFirst().orElse(null);
+                        existingProduct.setQuantity(existingProduct.getQuantity() + 1);
+                        existingProduct.setAmount(existingProduct.getQuantity() * existingProduct.getPrice());
+                        tableview.refresh();
+                    } else {
+                        tableview.getItems().add(createSalesModelObject(newProduct));
+                    }
+                    vcCalculator();
+                }
             }
         });
+    }
+
+    private SalesModel createSalesModelObject(ProductModel product) {
+        SalesModel salesModel = new SalesModel();
+        if (cbCustomerId.getValue() != null)
+            salesModel.setCustomerId(cbCustomerId.getValue().getCustomerId());
+        salesModel.setProductId(product.getProductId());
+        salesModel.setProductName(product.getProductName());
+        salesModel.setQuantity(1);
+        salesModel.setPrice(product.getSalePrice());
+        salesModel.setAmount(salesModel.getQuantity() * salesModel.getPrice());
+        return salesModel;
     }
 
     private void initCustomers() {
@@ -135,7 +258,8 @@ public class SalesController implements Initializable {
                     protected void updateItem(CustomerModel item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item == null || empty) {
-                            setGraphic(null);
+//                            setGraphic(null);
+                            setText("Unknown");
                         } else {
                             setText(item.getCustomerId());
                         }
@@ -151,5 +275,16 @@ public class SalesController implements Initializable {
             else
                 tfCustomerName.clear();
         });
+    }
+    private String getVoucherNumber() throws ParseException {
+        // Detect from Database here
+        String theLastVoucherFromDatabase = SqliteHelper.getTheLastVoucher();
+        boolean isToday = Utils.isVoucherToday(theLastVoucherFromDatabase);
+        if (isToday) {
+            int voucherNumber = Utils.extractVoucherNumber(theLastVoucherFromDatabase);
+            return "s" + String.format("%04d", voucherNumber + 1) + "-" + Utils.getTodayDate();
+        } else {
+            return "s" + String.format("%04d", 1) + "-" + Utils.getTodayDate();
+        }
     }
 }
