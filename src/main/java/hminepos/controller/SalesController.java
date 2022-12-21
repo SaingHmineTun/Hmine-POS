@@ -1,6 +1,9 @@
 package hminepos.controller;
 
 import hminepos.database.SqliteHelper;
+import hminepos.helper.ItemEvent;
+import hminepos.helper.ItemQuantity;
+import hminepos.helper.ItemQuantityListener;
 import hminepos.helper.Utils;
 import hminepos.model.CustomerModel;
 import hminepos.model.ProductModel;
@@ -18,6 +21,7 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import org.controlsfx.control.SearchableComboBox;
+import org.sqlite.util.StringUtils;
 
 import java.net.URL;
 import java.text.ParseException;
@@ -55,12 +59,6 @@ public class SalesController implements Initializable {
     private TableColumn<SalesModel, Integer> colQuantity;
 
     @FXML
-    private Button handleDeleteItem;
-
-    @FXML
-    private Button handleQuantity;
-
-    @FXML
     private Button btSell;
 
     @FXML
@@ -71,9 +69,6 @@ public class SalesController implements Initializable {
 
     @FXML
     private TextField tfCustomerName;
-
-    @FXML
-    private TextField tfTotalAmount;
 
     @FXML
     private TextField tfVoucherNo;
@@ -123,7 +118,6 @@ public class SalesController implements Initializable {
         cbCustomerId.setValue(null);
         cbProductId.setValue(null);
         tfCustomerName.clear();
-        tfTotalAmount.clear();
         tableview.getItems().clear();
         vcCash.setText("0");
         vcChange.setText("0");
@@ -173,7 +167,9 @@ public class SalesController implements Initializable {
             }
 
             public Integer fromString(String string) {
-                return Integer.parseInt(string);
+                if (Utils.isNumeric(string))
+                    return Integer.parseInt(string);
+                return 1;
             }
         }));
         colQuantity.setOnEditCommit(event -> {
@@ -238,9 +234,12 @@ public class SalesController implements Initializable {
                         SalesModel existingProduct = tableview.getItems().stream().filter(pm -> pm.getProductId().equals(newProduct.getProductId())).findFirst().orElse(null);
                         existingProduct.setQuantity(existingProduct.getQuantity() + 1);
                         existingProduct.setAmount(existingProduct.getQuantity() * existingProduct.getPrice());
+                        tableview.getSelectionModel().select(existingProduct);
                         tableview.refresh();
                     } else {
-                        tableview.getItems().add(createSalesModelObject(newProduct));
+                        SalesModel newSalesProduct = createSalesModelObject(newProduct);
+                        tableview.getItems().add(newSalesProduct);
+                        tableview.getSelectionModel().select(newSalesProduct);
                     }
                     vcCalculator();
                 }
@@ -300,6 +299,25 @@ public class SalesController implements Initializable {
             return "s" + String.format("%04d", voucherNumber + 1) + "-" + Utils.getTodayDate();
         } else {
             return "s" + String.format("%04d", 1) + "-" + Utils.getTodayDate();
+        }
+    }
+
+    public void handleQuantity(ActionEvent actionEvent) {
+        int tableIndex = tableview.getSelectionModel().getSelectedIndex();
+        if (tableIndex < 0) return;
+        String itemName = tableview.getItems().get(tableIndex).getProductName();
+        ItemQuantity.getInstance().setItemActionListener(itemName, tableIndex, itemEvent -> {
+            if (itemEvent.getValue() <= tableview.getItems().get(itemEvent.getIndex()).getMaxQuantity()) {
+                tableview.getItems().get(itemEvent.getIndex()).setQuantity(itemEvent.getValue());
+            }
+            tableview.refresh();
+        });
+    }
+
+    public void handleDeleteItem(ActionEvent actionEvent) {
+        if (!tableview.getItems().isEmpty()) {
+            // Selected Index will never be NULL
+            tableview.getItems().remove(tableview.getSelectionModel().getSelectedIndex());
         }
     }
 }

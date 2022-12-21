@@ -109,13 +109,13 @@
         </VBox>
     </top>
     <center>
-        <VBox alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" style="-fx-border-color: gray;">
+        <VBox alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" style="-fx-border-color: gray; -fx-border-width: 1 1 0 1;">
             <children>
                   <HBox alignment="CENTER_LEFT" spacing="10.0">
                       <children>
                           <SearchableComboBox fx:id="cbProductId" minHeight="20.0" minWidth="100.0" prefHeight="30.0" prefWidth="150.0" promptText="Product ID" />
-                          <Button fx:id="handleQuantity" layoutX="162.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" prefHeight="30.0" styleClass="info" text="Quantity" />
-                          <Button fx:id="handleDeleteItem" layoutX="214.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" prefHeight="30.0" styleClass="danger" text="Delete" />
+                          <Button layoutX="162.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#handleQuantity" prefHeight="30.0" styleClass="info" text="Quantity" />
+                          <Button layoutX="214.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#handleDeleteItem" prefHeight="30.0" styleClass="danger" text="Delete" />
                           <ComboBox fx:id="saleOrderCob" minWidth="100.0" prefHeight="30.0" prefWidth="150.0" visible="false" visibleRowCount="5" />
                       </children>
                <padding>
@@ -134,23 +134,6 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                     </columnResizePolicy>
                 </TableView>
-                <VBox alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="100.0" spacing="5.0">
-                    <children>
-                        <VBox alignment="BOTTOM_CENTER" spacing="10.0">
-                            <children>
-                                <HBox alignment="BOTTOM_RIGHT" layoutX="10.0" layoutY="110.0" prefHeight="40.0" prefWidth="200.0">
-                                    <children>
-                                        <Label minWidth="100.0" text="Total Amount" />
-                                        <TextField fx:id="tfTotalAmount" editable="false" />
-                                    </children>
-                                </HBox>
-                            </children>
-                        </VBox>
-                    </children>
-                    <padding>
-                        <Insets bottom="15.0" right="15.0" />
-                    </padding>
-                </VBox>
             </children>
             <BorderPane.margin>
                 <Insets left="10.0" />

@@ -1,21 +1,9 @@
-@import 'MFXColors.css';
-
-@font-face {
-    font-family: 'NamTeng Web Pro';
-    src: url("shn.ttf");
-}
+@import 'my-style.css';
 
 .root {
 	-fx-body-color : #F5F5F5;
 	-fx-outer-border : #cecece;
-	-fx-font-size: 15px;
-	-fx-font-family: 'NamTeng Web Pro';
 
-}
-
-
-.text {
-    -fx-font-family: 'NamTeng Web Pro';
 }
 .button:focused, .toggle-button:focused,
 .split-menu-button:focused, .menu-button:focused,
@@ -944,85 +932,3 @@ VBox > .split-menu-button.last > .arrow-button {
 	-fx-pref-width: 5;
 }
 
-
-.mao-style {
-    -fx-background-color: rgba(200, 200, 200, 0.7);
-	-fx-border-width: 1;
-	-fx-border-color: #E0E0E0;
-	-fx-border-radius: 10px;
-	-fx-background-radius: 10px;
-}
-
-.mao-style:hover {
-	-fx-background-color: rgba(160, 160, 160, 0.7);
-}
-
-
-/**************************************************
- * Text Fields
-**************************************************/
-.mfx-text-field {
-	-fx-font-family: 'NamTeng Web Pro';
-	-fx-font-size: 16px;
-	-fx-border-color: -mfx-charcoal;
-	-fx-text-fill: #111;
-}
-
-.mfx-text-field .floating-text {
-	-fx-font-family: 'NamTeng Web Pro';
-	-fx-text-fill: -mfx-charcoal;
-}
-
-
-.f-big {
-    -fx-font-size: 18px;
-}
-
-.border-1 {
-    -fx-border-color: #999;
-}
-
-#login-bg {
-    -fx-background-image: url("login-bg.jpg");
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center center;
-}
-
-#login-form {
-    -fx-background-color: #F5F5F5;
-}
-
-.fs-30 {
-    -fx-font-size: 30px;
-    -fx-font-weight: bold;
-}
-
-.link-create-account {
-    -fx-text-fill: -mfx-green;
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-}
-
-.link-create-account:hover {
-    -fx-underline: true;
-}
-
-.link-create-account:pressed {
-    -fx-text-fill: -mfx-blue;
-}
-
-.label-error {
-    -fx-text-fill: #F00;
-}
-
-.validatedField:invalid {
-	-fx-border-color: -mfx-red;
-}
-
-.validatedField:invalid .floating-text {
-	-fx-text-fill: -mfx-red;
-}
-
-.validatedField:invalid .mfx-font-icon {
-	-mfx-color: -mfx-red;
-}

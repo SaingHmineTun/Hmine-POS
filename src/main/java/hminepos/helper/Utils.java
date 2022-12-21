@@ -12,6 +12,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * Created by Mao on 12/1/2022.
@@ -82,4 +83,12 @@ public class Utils {
         String getNumber = theLastVoucherFromDatabase.split("-")[0].substring(1);
         return Integer.parseInt(getNumber);
     }
+
+    public static boolean isNumeric(String string) {
+        Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+        if (string == null) return false;
+        return pattern.matcher(string).matches();
+    }
+
+
 }
