@@ -2,6 +2,7 @@ package hminepos.controller;
 
 import hminepos.database.SqliteHelper;
 import hminepos.helper.ItemQuantity;
+import hminepos.helper.Type;
 import hminepos.helper.Utils;
 import hminepos.model.*;
 import javafx.collections.FXCollections;
@@ -16,6 +17,8 @@ import javafx.util.StringConverter;
 import org.controlsfx.control.SearchableComboBox;
 
 import java.net.URL;
+import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 /**
@@ -86,7 +89,7 @@ public class PurchasesController implements Initializable {
         if (tableIndex < 0) return;
         String itemName = tableview.getItems().get(tableIndex).getProductName();
         ItemQuantity.getInstance().setItemActionListener(itemName, tableIndex, itemEvent -> {
-            if (itemEvent.getValue() <= tableview.getItems().get(itemEvent.getIndex()).getMaxQuantity()) {
+            if (itemEvent.getValue() > 0) {
                 tableview.getItems().get(itemEvent.getIndex()).setQuantity(itemEvent.getValue());
             }
             tableview.refresh();
@@ -99,7 +102,29 @@ public class PurchasesController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initSuppliers();
         initProducts();
+        initVoucher();
         setupTableColumnValueFactory();
+    }
+
+    private void initVoucher() {
+        try {
+            tfVoucher.setText(getVoucherNumber());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private String getVoucherNumber() throws ParseException {
+        // Detect from Database here
+        String theLastVoucherFromDatabase = SqliteHelper.getTheLastVoucher(Type.PURCHASE);
+        boolean isToday = Utils.isVoucherToday(theLastVoucherFromDatabase);
+        if (isToday) {
+            int voucherNumber = Utils.extractVoucherNumber(theLastVoucherFromDatabase);
+            return "p" + String.format("%04d", voucherNumber + 1) + "-" + Utils.getTodayDate();
+        } else {
+            return "p" + String.format("%04d", 1) + "-" + Utils.getTodayDate();
+        }
     }
 
     private void setupTableColumnValueFactory() {
@@ -118,12 +143,12 @@ public class PurchasesController implements Initializable {
         }));
         colQuantity.setOnEditCommit(event -> {
             PurchasesModel tmp = event.getTableView().getItems().get(event.getTablePosition().getRow());
-            if (event.getNewValue() <= tmp.getMaxQuantity()) {
+            if (event.getNewValue() > 0) {
                 tmp.setQuantity(event.getNewValue());
                 vcCalculator();
                 tableview.refresh();
             } else {
-                // Not enough items
+                // No item to add
                 tmp.setQuantity(event.getOldValue());
                 tableview.refresh();
             }
@@ -226,4 +251,38 @@ public class PurchasesController implements Initializable {
         });
     }
 
+    public void handlePurchase(ActionEvent event) throws ParseException {
+
+        // Same data for all table items
+        // createdAt, voucher
+        String createdAt = LocalDateTime.now().toString();
+        for (PurchasesModel purchase :
+                tableview.getItems()) {
+            purchase.setVoucher(tfVoucher.getText());
+            purchase.setCreatedAt(createdAt);
+            purchase.setCreatedBy(Utils.getCurrentUserId());
+            purchase.setSupplierId(cbSupplierId.getValue() == null ? "" : cbSupplierId.getValue().getSupplierId());
+            System.out.println(purchase);
+            // #1 Subtract quantity from products table
+            if (SqliteHelper.increaseProduct(purchase))
+                // #2 Add the record to the sales table
+                SqliteHelper.addPurchase(purchase);
+        }
+        // After finishing adding all items, close the connection!
+        SqliteHelper.closeConnection();
+        prepareToPurchaseAgain();
+    }
+
+    private void prepareToPurchaseAgain() throws ParseException {
+        cbSupplierId.setValue(null);
+        cbProductId.setValue(null);
+        tfSupplierName.clear();
+        tableview.getItems().clear();
+        tfTotalAmount.setText("0");
+        tfTotalQuantity.setText("0");
+        tfVoucher.setText(getVoucherNumber());
+        // After finish selling one time, to get the remaining quantity of our products
+        // We must refresh cbProductId once again!!!
+        cbProductId.setItems(FXCollections.observableArrayList(SqliteHelper.getAllProducts()));
+    }
 }

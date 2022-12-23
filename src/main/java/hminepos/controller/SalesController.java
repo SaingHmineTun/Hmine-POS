@@ -2,6 +2,7 @@ package hminepos.controller;
 
 import hminepos.database.SqliteHelper;
 import hminepos.helper.ItemQuantity;
+import hminepos.helper.Type;
 import hminepos.helper.Utils;
 import hminepos.model.CustomerModel;
 import hminepos.model.ProductModel;
@@ -307,7 +308,7 @@ public class SalesController implements Initializable {
 
     private String getVoucherNumber() throws ParseException {
         // Detect from Database here
-        String theLastVoucherFromDatabase = SqliteHelper.getTheLastVoucher();
+        String theLastVoucherFromDatabase = SqliteHelper.getTheLastVoucher(Type.SALE);
         boolean isToday = Utils.isVoucherToday(theLastVoucherFromDatabase);
         if (isToday) {
             int voucherNumber = Utils.extractVoucherNumber(theLastVoucherFromDatabase);

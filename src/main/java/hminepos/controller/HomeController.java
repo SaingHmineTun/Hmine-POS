@@ -75,9 +75,6 @@ public class HomeController implements Initializable {
         return stage;
     }
 
-    public void handle_history(MouseEvent mouseEvent) {
-    }
-
     public void handle_suppliers(MouseEvent mouseEvent) throws IOException {
 
         createStageFor(SUPPLIER).show();
@@ -93,5 +90,11 @@ public class HomeController implements Initializable {
         if (Utils.getCurrentUser().getImage() != null && Utils.getCurrentUser().getImage().length() > 0)
             ivCurrentUser.setImage(ImageEncoder.decodeToImage(Utils.getCurrentUser().getImage()));
         lbCurrentUser.setText(Utils.getCurrentUserName());
+    }
+
+    public void handle_sale_report(MouseEvent mouseEvent) {
+    }
+
+    public void handle_purchase_report(MouseEvent mouseEvent) {
     }
 }

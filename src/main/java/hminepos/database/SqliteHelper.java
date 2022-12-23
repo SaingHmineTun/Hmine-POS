@@ -1,5 +1,6 @@
 package hminepos.database;
 
+import hminepos.helper.Type;
 import hminepos.helper.Utils;
 import hminepos.model.*;
 
@@ -416,10 +417,17 @@ public class SqliteHelper {
     }
 
     // Sales SCOPE!!!
-    public static String getTheLastVoucher() {
-        String query = "SELECT voucher FROM sales ORDER BY no DESC LIMIT 1;";
+    public static String getTheLastVoucher(Type type) {
+        String str = "";
+        if (type == Type.SALE) {
+            str = "sales";
+        } else {
+            str = "purchases";
+        }
+        String query = "SELECT voucher FROM " + str + " ORDER BY no DESC LIMIT 1;";
         // Initialize with today voucher number!
-        String result = "s" + String.format("%04d", 1) + "-" + Utils.getTodayDate();
+        // Given 0 here will increase to 1 in getVoucherNumber method from Sales & Purchases
+        String result = str.charAt(0) + String.format("%04d", 0) + "-" + Utils.getTodayDate();
         try {
             if (con == null || con.isClosed()) {
                 getConnection();
@@ -497,5 +505,58 @@ public class SqliteHelper {
             e.printStackTrace();
         }
         return updatedRow > 0;
+    }
+
+    public static boolean increaseProduct(PurchasesModel purchase) {
+        String sql = "UPDATE products SET quantity=? WHERE product_id=?";
+        int updatedRow = 0;
+
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            // set the corresponding param
+            // MaxQuantity is Current Quantity you have
+            // Quantity is the amount you are going to increase
+            pstmt.setInt(1, (purchase.getMaxQuantity() + purchase.getQuantity()));
+            pstmt.setString(2, purchase.getProductId());
+            // update
+            updatedRow = pstmt.executeUpdate();
+            pstmt.close();
+            con.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return updatedRow > 0;
+    }
+
+    public static boolean addPurchase(PurchasesModel purchase) {
+
+        String sql = "INSERT INTO purchases (voucher,product_id,supplier_id,quantity,price,created_by,created_at) VALUES(?,?,?,?,?,?,?);";
+
+        int addedRow = 0;
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, purchase.getVoucher());
+            pstmt.setString(2, purchase.getProductId());
+            pstmt.setString(3, purchase.getSupplierId());
+            pstmt.setInt(4, purchase.getQuantity());
+            pstmt.setDouble(5, purchase.getPrice());
+            pstmt.setString(6, purchase.getCreatedBy());
+            pstmt.setString(7, purchase.getCreatedAt());
+            addedRow = pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return addedRow > 0;
     }
 }

@@ -123,16 +123,31 @@
                   </VBox>
                </children>
             </VBox>
-            <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <VBox alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
-                  <VBox alignment="CENTER" maxHeight="200.0" maxWidth="200.0" onMouseClicked="#handle_history" spacing="20.0" styleClass="mao-style" VBox.vgrow="ALWAYS">
+                  <VBox alignment="CENTER" maxHeight="200.0" maxWidth="200.0" onMouseClicked="#handle_purchase_report" spacing="20.0" styleClass="mao-style" VBox.vgrow="ALWAYS">
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/history.png" />
+                              <Image url="@../images/purchase-report.png" />
                            </image>
                         </ImageView>
-                        <Label text="History" />
+                        <Label text="Purchase Report" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+
+            <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <children>
+                  <VBox alignment="CENTER" maxHeight="200.0" maxWidth="200.0" onMouseClicked="#handle_sale_report" spacing="20.0" styleClass="mao-style" VBox.vgrow="ALWAYS">
+                     <children>
+                        <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/sale-report.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="Sale Report" />
                      </children>
                   </VBox>
                </children>
