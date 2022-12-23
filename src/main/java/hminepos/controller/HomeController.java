@@ -34,13 +34,12 @@ public class HomeController implements Initializable {
         createStageFor(SALE).show();
     }
 
-    public void handle_purchases(MouseEvent mouseEvent) {
+    public void handle_purchases(MouseEvent mouseEvent) throws IOException {
+        createStageFor(PURCHASE).show();
     }
 
     public void handle_products(MouseEvent mouseEvent) throws IOException {
-
         createStageFor(PRODUCT).show();
-
     }
 
     public void handle_users(MouseEvent mouseEvent) throws IOException {
@@ -65,6 +64,9 @@ public class HomeController implements Initializable {
         } else if (type == SALE) {
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/sales.fxml"));
             stage.setTitle("Sales");
+        } else if (type == PURCHASE) {
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/purchases.fxml"));
+            stage.setTitle("Purchases");
         }
         Scene scene = new Scene(fxmlLoader.load(), Perc.getFullWidth(), Perc.p90h());
         stage.setScene(scene);

@@ -296,11 +296,13 @@ public class SalesController implements Initializable {
         };
         cbCustomerId.setCellFactory(cellFactory);
         cbCustomerId.setButtonCell(cellFactory.call(null));
-        cbCustomerId.getSelectionModel().selectedItemProperty().addListener(observable -> {
-            if (cbCustomerId.getValue() != null)
-                tfCustomerName.setText(cbCustomerId.getValue().getCustomerName());
-            else
-                tfCustomerName.clear();
+        cbCustomerId.showingProperty().addListener((observable, hidden, showing) -> {
+            if (hidden) {
+                if (cbCustomerId.getValue() != null)
+                    tfCustomerName.setText(cbCustomerId.getValue().getCustomerName());
+                else
+                    tfCustomerName.clear();
+            }
         });
     }
 

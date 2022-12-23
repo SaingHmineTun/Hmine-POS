@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.SearchableComboBox?>
+
+<BorderPane prefWidth="1000.0" stylesheets="@../styles/bootstrap.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hminepos.controller.PurchasesController">
+    <top>
+        <VBox>
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="15.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="10.0">
+                            <children>
+                                <Label prefHeight="30.0" text="Supplier ID" />
+                            </children>
+                        </HBox>
+                        <SearchableComboBox fx:id="cbSupplierId" maxHeight="35.0" minHeight="30.0" prefWidth="170.0" promptText="Unknown" visibleRowCount="5" />
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="40.0" spacing="10.0">
+                            <children>
+                                <Label prefHeight="30.0" text="Supplier Name" />
+                                <TextField fx:id="tfSupplierName" editable="false" minHeight="35.0" prefHeight="35.0" prefWidth="150.0" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="275.0" layoutY="10.0" prefHeight="40.0" spacing="10.0">
+                            <children>
+                                <Label prefHeight="30.0" text="Voucher" />
+                                <TextField fx:id="tfVoucher" editable="false" minHeight="35.0" onAction="#actionVoucher" />
+                            </children>
+                        </HBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                    </VBox.margin>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <VBox spacing="10.0" style="-fx-border-color: gray;">
+            <children>
+                <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="25.0">
+                    <children>
+                          <SearchableComboBox fx:id="cbProductId" minWidth="100.0" prefWidth="150.0" promptText="Product ID" visibleRowCount="5" HBox.hgrow="NEVER" />
+                          <Button minWidth="100.0" mnemonicParsing="false" onAction="#handleItemQuantity" prefHeight="30.0" text="Item Quantity">
+                              <font>
+                                  <Font name="Zawgyi-Tai" size="13.0" />
+                              </font>
+                          </Button>
+                          <Button minWidth="100.0" mnemonicParsing="false" onAction="#handleDeleteItem" prefHeight="30.0" styleClass="danger" text="Delete Item">
+                              <font>
+                                  <Font name="Zawgyi-Tai" size="13.0" />
+                              </font>
+                          </Button>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="10.0" />
+                    </VBox.margin>
+                </HBox>
+                <TableView fx:id="tableview" style="-fx-background-color: null; -fx-border-color: gray; -fx-border-width: 1 0 1 0;" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colProductID" maxWidth="600.0" minWidth="75.0" prefWidth="150.0" text="Product ID" />
+                        <TableColumn fx:id="colProductName" maxWidth="2400.0" minWidth="300.0" prefWidth="600.0" text="Product Name" />
+                        <TableColumn fx:id="colQuantity" maxWidth="800.0" minWidth="100.0" prefWidth="200.0" text="Quantity" />
+                        <TableColumn fx:id="colPrice" maxWidth="800.0" minWidth="100.0" prefWidth="200.0" text="Price" />
+                        <TableColumn fx:id="colAmount" maxWidth="800.0" minWidth="100.0" prefWidth="200.0" text="Amount" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+                <VBox spacing="10.0">
+                    <children>
+                        <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="110.0" prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                            <children>
+                                <Label prefWidth="100.0" text="Total Quantity">
+                                </Label>
+                                <TextField fx:id="tfTotalQuantity">
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin></TextField>
+                        <Label layoutX="669.0" layoutY="18.0" prefWidth="100.0" text="Total Amount" />
+                        <TextField fx:id="tfTotalAmount" layoutX="669.0" layoutY="13.0" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                            <children>
+                                <Button fx:id="btnCancel" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" styleClass="danger" text="Cancel">
+                                    <font>
+                                        <Font name="Zawgyi-Tai" size="13.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="btnReceive" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" styleClass="success" text="Purchase">
+                                    <font>
+                                        <Font name="Zawgyi-Tai" size="13.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="15.0" right="15.0" />
+                    </padding>
+                </VBox>
+            </children>
+            <BorderPane.margin>
+                <Insets left="10.0" right="10.0" />
+            </BorderPane.margin>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+        </VBox>
+    </center>
+    <bottom>
+        <fx:include source="footer.fxml" />
+    </bottom>
+</BorderPane>
