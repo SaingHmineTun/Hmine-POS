@@ -1,9 +1,7 @@
 package hminepos.controller;
 
 import hminepos.database.SqliteHelper;
-import hminepos.helper.ItemQuantity;
-import hminepos.helper.Type;
-import hminepos.helper.Utils;
+import hminepos.helper.*;
 import hminepos.model.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -17,6 +15,7 @@ import javafx.util.StringConverter;
 import org.controlsfx.control.SearchableComboBox;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
@@ -32,7 +31,7 @@ public class PurchasesController implements Initializable {
     private Button btnCancel;
 
     @FXML
-    private Button btnReceive;
+    private Button btPurchase;
 
     @FXML
     private SearchableComboBox<ProductModel> cbProductId;
@@ -135,6 +134,7 @@ public class PurchasesController implements Initializable {
             public String toString(Integer object) {
                 return object.toString();
             }
+
             public Integer fromString(String string) {
                 if (Utils.isNumeric(string))
                     return Integer.parseInt(string);
@@ -194,7 +194,7 @@ public class PurchasesController implements Initializable {
                     }
                     vcCalculator();
                 }
-                System.out.println("Handle Product ID");
+                btPurchase.requestFocus();
             }
         });
     }
@@ -251,7 +251,27 @@ public class PurchasesController implements Initializable {
         });
     }
 
-    public void handlePurchase(ActionEvent event) throws ParseException {
+    public void handlePurchase(ActionEvent event) {
+        PurchaseConfirm pc = new PurchaseConfirm(Double.parseDouble(tfTotalAmount.getText()));
+        pc.setOnPurchaseConfirmListener(event1 -> {
+            if (event1.isConfirm()) {
+                if (event1.getChange() >= 0) {
+                    try {
+                        // Purchase With Cash
+                        purchaseAction();
+                        event1.getConfirmBox().close();
+                        prepareToPurchaseAgain();
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            } else {
+                event1.getConfirmBox().close();
+            }
+        });
+    }
+
+    private void purchaseAction() throws ParseException {
 
         // Same data for all table items
         // createdAt, voucher

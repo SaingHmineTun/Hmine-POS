@@ -48,27 +48,32 @@ public class HomeController implements Initializable {
 
     private Stage createStageFor(Type type) throws IOException {
         Stage stage = new Stage();
+        String title = "";
         FXMLLoader fxmlLoader = null;
         if (type == USER) {
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/users-view.fxml"));
-            stage.setTitle("Users");
+            title = "Users";
         } else if (type == PRODUCT) {
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/products-view.fxml"));
-            stage.setTitle("Products");
+            title = "Products";
         } else if (type == CUSTOMER) {
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/customers-view.fxml"));
-            stage.setTitle("Customers");
+            title = "Customers";
         } else if (type == SUPPLIER) {
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/suppliers-view.fxml"));
-            stage.setTitle("Suppliers");
+            title = "Suppliers";
         } else if (type == SALE) {
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/sales.fxml"));
-            stage.setTitle("Sales");
+            title = "Sales";
         } else if (type == PURCHASE) {
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/purchases.fxml"));
-            stage.setTitle("Purchases");
+            title = "Purchases";
+        }else if (type == SALE_REPORT) {
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/sale-report.fxml"));
+            title = "Sale Reports";
         }
         Scene scene = new Scene(fxmlLoader.load(), Perc.getFullWidth(), Perc.p90h());
+        stage.setTitle(title);
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -92,7 +97,8 @@ public class HomeController implements Initializable {
         lbCurrentUser.setText(Utils.getCurrentUserName());
     }
 
-    public void handle_sale_report(MouseEvent mouseEvent) {
+    public void handle_sale_report(MouseEvent mouseEvent) throws IOException {
+        createStageFor(SALE_REPORT).show();
     }
 
     public void handle_purchase_report(MouseEvent mouseEvent) {

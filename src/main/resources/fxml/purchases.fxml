@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import org.controlsfx.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.SearchableComboBox?>
 
-<BorderPane prefWidth="1000.0" stylesheets="@../styles/bootstrap.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hminepos.controller.PurchasesController">
+<BorderPane prefWidth="1000.0" stylesheets="@../styles/bootstrap.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hminepos.controller.PurchasesController">
     <top>
         <VBox>
             <children>
@@ -77,12 +83,12 @@
                             <children>
                                 <Label prefWidth="100.0" text="Total Quantity">
                                 </Label>
-                                <TextField fx:id="tfTotalQuantity">
+                                <TextField fx:id="tfTotalQuantity" editable="false">
                            <HBox.margin>
                               <Insets right="20.0" />
                            </HBox.margin></TextField>
                         <Label layoutX="669.0" layoutY="18.0" prefWidth="100.0" text="Total Amount" />
-                        <TextField fx:id="tfTotalAmount" layoutX="669.0" layoutY="13.0" />
+                        <TextField fx:id="tfTotalAmount" editable="false" layoutX="669.0" layoutY="13.0" />
                             </children>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" spacing="10.0">
@@ -92,7 +98,7 @@
                                         <Font name="Zawgyi-Tai" size="13.0" />
                                     </font>
                                 </Button>
-                                <Button mnemonicParsing="false" onAction="#handlePurchase" prefHeight="30.0" prefWidth="100.0" styleClass="success" text="Purchase">
+                                <Button fx:id="btPurchase" mnemonicParsing="false" onAction="#handlePurchase" prefHeight="30.0" prefWidth="100.0" styleClass="success" text="Purchase">
                                     <font>
                                         <Font name="Zawgyi-Tai" size="13.0" />
                                     </font>

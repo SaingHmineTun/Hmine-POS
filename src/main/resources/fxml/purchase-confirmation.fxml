@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="new-dialog" stylesheets="@../styles/bootstrap.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="CENTER_LEFT">
+         <children>
+            <HBox alignment="CENTER">
+               <children>
+                  <Label prefHeight="50.0" prefWidth="150.0" text="Amount :">
+                  </Label>
+                  <Label fx:id="lbAmount" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="1000" HBox.hgrow="ALWAYS" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0">
+               <children>
+                  <Label prefHeight="50.0" prefWidth="150.0" text="Pay :" />
+                  <TextField fx:id="tfPay" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="160.0">
+               <children>
+                  <Label prefHeight="50.0" prefWidth="150.0" text="Change :">
+
+                  </Label>
+                  <Label fx:id="lbChange" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="1000" textFill="RED" HBox.hgrow="ALWAYS" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="TOP_CENTER" prefHeight="65.0" prefWidth="325.0" spacing="25.0">
+               <children>
+                  <JFXButton fx:id="btConfirm" disable="true" layoutX="10.0" layoutY="10.0" minHeight="35.0" minWidth="75.0" onAction="#handleConfirm" prefHeight="35.0" prefWidth="100.0" styleClass="success" text="Confirm">
+
+                  </JFXButton>
+                  <JFXButton minHeight="35.0" minWidth="75.0" onAction="#handleCancel" prefHeight="35.0" prefWidth="100.0" styleClass="danger" text="Cancel">
+
+                  </JFXButton>
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</VBox>

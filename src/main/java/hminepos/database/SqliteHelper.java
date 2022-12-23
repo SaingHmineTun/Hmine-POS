@@ -5,6 +5,7 @@ import hminepos.helper.Utils;
 import hminepos.model.*;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -558,5 +559,39 @@ public class SqliteHelper {
             e.printStackTrace();
         }
         return addedRow > 0;
+    }
+
+    public static List<SalesModel> getSalesData(LocalDateTime timeStart, LocalDateTime timeEnd) {
+        List<SalesModel> salesModels = new ArrayList<>();
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            System.out.println("TIME START : " + timeStart.toString());
+            System.out.println("TIME END : " + timeEnd.toString());
+            String sql = "SELECT * FROM sales WHERE created_at > ? AND created_at < ?;";
+            PreparedStatement prep = con.prepareStatement(sql);
+            prep.setString(1, timeStart.toString());
+            prep.setString(2, timeEnd.toString());
+            ResultSet res = prep.executeQuery();
+            for (int i = 1; res.next(); i ++) {
+                SalesModel salesModel = new SalesModel();
+                salesModel.setNo(i);
+                salesModel.setVoucher(res.getString("voucher"));
+                salesModel.setCustomerId(res.getString("customer_id"));
+                salesModel.setProductId(res.getString("product_id"));
+                salesModel.setPrice(res.getDouble("price"));
+                salesModel.setQuantity(res.getInt("quantity"));
+                salesModel.setCreatedBy(res.getString("created_by"));
+                salesModel.setCreatedAt(res.getString("created_at"));
+                salesModels.add(salesModel);
+            }
+            res.close();
+            prep.close();
+            con.close();
+        } catch (SQLException | ClassNotFoundException throwable) {
+            throwable.printStackTrace();
+        }
+        return salesModels;
     }
 }

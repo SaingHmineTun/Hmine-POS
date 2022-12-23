@@ -82,15 +82,6 @@ public class CustomerModel {
 
     @Override
     public String toString() {
-        return "CustomerModel{" +
-                "customerId='" + customerId + '\'' +
-                ", customerName='" + customerName + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", image='" + image + '\'' +
-                ", createdBy='" + createdBy + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                '}';
+        return this.customerId;
     }
 }
