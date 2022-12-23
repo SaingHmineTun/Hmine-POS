@@ -84,6 +84,7 @@ public class PurchasesModel {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+        this.amount = this.price * quantity;
     }
 
     public double getPrice() {

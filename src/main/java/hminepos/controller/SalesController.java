@@ -246,7 +246,6 @@ public class SalesController implements Initializable {
                     if (tableview.getItems().contains(newProduct)) {
                         SalesModel existingProduct = tableview.getItems().stream().filter(pm -> pm.getProductId().equals(newProduct.getProductId())).findFirst().orElse(null);
                         existingProduct.setQuantity(existingProduct.getQuantity() + 1);
-                        existingProduct.setAmount(existingProduct.getQuantity() * existingProduct.getPrice());
                         tableview.getSelectionModel().select(existingProduct);
                         tableview.refresh();
                     } else {

@@ -120,7 +120,6 @@ public class PurchasesController implements Initializable {
             PurchasesModel tmp = event.getTableView().getItems().get(event.getTablePosition().getRow());
             if (event.getNewValue() <= tmp.getMaxQuantity()) {
                 tmp.setQuantity(event.getNewValue());
-                tmp.setAmount(event.getNewValue() * tmp.getPrice());
                 vcCalculator();
                 tableview.refresh();
             } else {

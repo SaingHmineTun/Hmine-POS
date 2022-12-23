@@ -65,7 +65,7 @@
                         <Insets left="10.0" />
                     </VBox.margin>
                 </HBox>
-                <TableView fx:id="tableview" style="-fx-background-color: null; -fx-border-color: gray; -fx-border-width: 1 0 1 0;" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+                <TableView fx:id="tableview" editable="true" style="-fx-background-color: null; -fx-border-color: gray; -fx-border-width: 1 0 1 0;" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="colProductID" maxWidth="600.0" minWidth="75.0" prefWidth="150.0" text="Product ID" />
                         <TableColumn fx:id="colProductName" maxWidth="2400.0" minWidth="300.0" prefWidth="600.0" text="Product Name" />

@@ -82,10 +82,12 @@ public class ProductModel {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ProductModel) {
-            return ((ProductModel)obj).getProductId().equals(getProductId());
-        } else if (obj instanceof SalesModel) {
-            return ((SalesModel)obj).getProductId().equals(getProductId());
-        } return false;
+        if (obj instanceof ProductModel)
+            return ((ProductModel) obj).getProductId().equals(getProductId());
+        else if (obj instanceof SalesModel)
+            return ((SalesModel) obj).getProductId().equals(getProductId());
+        else if (obj instanceof PurchasesModel)
+            return ((PurchasesModel) obj).getProductId().equals(getProductId());
+        else return false;
     }
 }
