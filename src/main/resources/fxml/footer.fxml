@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<?import javafx.geometry.Insets?>
-<HBox prefHeight="40.0" fx:controller="hminepos.controller.FooterController" prefWidth="200.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+<HBox prefHeight="40.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hminepos.controller.FooterController">
     <children>
         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
             <children>
                 <Label fx:id="user" minHeight="40.0" minWidth="75.0" prefHeight="40.0" text="Login as" />
-                <Label fx:id="userName" layoutX="10.0" layoutY="22.0" prefHeight="40.0" />
+                <Label fx:id="userName" layoutX="10.0" layoutY="22.0" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="74.0" style="-fx-font-weight: bold; -fx-font-size: 30; -fx-text-fill: green;" text="User" HBox.hgrow="ALWAYS" />
             </children>
         </HBox>
         <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">

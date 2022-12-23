@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-
-<VBox prefHeight="600.0" prefWidth="100.0" stylesheets="@../styles/bootstrap.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hminepos.controller.HomeController">
+<VBox prefHeight="600.0" prefWidth="100.0" stylesheets="@../styles/bootstrap.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hminepos.controller.HomeController">
    <children>
       <HBox alignment="CENTER_RIGHT" spacing="20.0" style="-fx-background-color: #CCC;">
          <children>
             <Label fx:id="lbCurrentUser" text="User ID" />
-            <ImageView fx:id="ivCurrentUser" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+            <StackPane style="-fx-border-color: #555; -fx-border-width: 2px;">
+               <children>
+                  <ImageView fx:id="ivCurrentUser" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/user.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="50.0" top="10.0" />

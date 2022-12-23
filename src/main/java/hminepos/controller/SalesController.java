@@ -1,9 +1,7 @@
 package hminepos.controller;
 
 import hminepos.database.SqliteHelper;
-import hminepos.helper.ItemEvent;
 import hminepos.helper.ItemQuantity;
-import hminepos.helper.ItemQuantityListener;
 import hminepos.helper.Utils;
 import hminepos.model.CustomerModel;
 import hminepos.model.ProductModel;
@@ -15,13 +13,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import org.controlsfx.control.SearchableComboBox;
-import org.sqlite.util.StringUtils;
 
 import java.net.URL;
 import java.text.ParseException;
@@ -137,6 +135,22 @@ public class SalesController implements Initializable {
         initProducts();
         initVouchers();
         setupTableColumValue();
+        setupTextFieldListeners();
+    }
+
+    private void setupTextFieldListeners() {
+        // Press Enter Key on vcCash will fire btSell click event!!!
+        vcCash.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.ENTER && !btSell.isDisabled()) {
+                btSell.fire();
+            }
+        });
+        // When vcCash is focused, automatically select all text in the field!
+        vcCash.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (isNowFocused) {
+                vcCash.selectAll();
+            }
+        });
     }
 
     // This method includes Voucher TextField & Voucher Report
@@ -148,13 +162,11 @@ public class SalesController implements Initializable {
         }
         TextFormatter<Double> doubleTextFormatter = new TextFormatter<>(
                 new DoubleStringConverter(),
-                0.0,
+                (double) 0,
                 change -> Pattern.matches("\\d*", change.getText()) ? change : null
         );
         vcCash.setTextFormatter(doubleTextFormatter);
-        vcCash.textProperty().addListener(observable -> {
-            vcCalculator();
-        });
+        vcCash.textProperty().addListener(observable -> vcCalculator());
     }
 
     private void setupTableColumValue() {
@@ -192,9 +204,9 @@ public class SalesController implements Initializable {
     private void vcCalculator() {
         vcTotalQuantity.setText("" + tableview.getItems().stream().mapToInt(SalesModel::getQuantity).sum());
         vcTotalAmount.setText("" + tableview.getItems().stream().mapToDouble(SalesModel::getAmount).sum());
-        double change = (Double.parseDouble(vcCash.getText()) - Double.parseDouble(vcTotalAmount.getText()));
-        vcChange.setText("" + change);
-        if (change < 0) {
+        String strCash = vcCash.getText();
+        double change = (Double.parseDouble(strCash) - Double.parseDouble(vcTotalAmount.getText()));
+        if (strCash.isEmpty() || Double.parseDouble(strCash) <= 0 || change < 0) {
             // Cannot sell Things
             vcChange.setTextFill(Color.RED);
             btSell.setDisable(true);
@@ -203,6 +215,7 @@ public class SalesController implements Initializable {
             vcChange.setTextFill(Color.GREEN);
             btSell.setDisable(false);
         }
+        vcChange.setText("" + change);
 
     }
 
@@ -242,6 +255,7 @@ public class SalesController implements Initializable {
                         tableview.getSelectionModel().select(newSalesProduct);
                     }
                     vcCalculator();
+                    vcCash.requestFocus();
                 }
             }
         });
@@ -309,6 +323,7 @@ public class SalesController implements Initializable {
         ItemQuantity.getInstance().setItemActionListener(itemName, tableIndex, itemEvent -> {
             if (itemEvent.getValue() <= tableview.getItems().get(itemEvent.getIndex()).getMaxQuantity()) {
                 tableview.getItems().get(itemEvent.getIndex()).setQuantity(itemEvent.getValue());
+                vcCash.requestFocus();
             }
             tableview.refresh();
         });

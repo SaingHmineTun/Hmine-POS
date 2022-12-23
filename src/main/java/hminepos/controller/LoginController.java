@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -29,12 +30,11 @@ import static io.github.palexdev.materialfx.validation.Validated.INVALID_PSEUDO_
 
 
 public class LoginController implements Initializable {
-
-    @FXML
-    private MFXButton handleLogin;
-
     @FXML
     private Text lbFail;
+
+    @FXML
+    private MFXButton btLogin;
 
     @FXML
     private MFXPasswordField pfPassword;
@@ -112,6 +112,16 @@ public class LoginController implements Initializable {
             }
         });
 
+        // When press enter key in username, the focus must move to password field
+        tfUserName.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.ENTER && !tfUserName.getText().isEmpty()) pfPassword.requestFocus();
+        });
+
+        pfPassword.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.ENTER && !pfPassword.getText().isEmpty())
+                btLogin.fire();
+        });
+
     }
 
     public void handleCreateUser(MouseEvent mouseEvent) throws IOException {
@@ -119,7 +129,7 @@ public class LoginController implements Initializable {
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/register-user-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        ((RegisterUserController)fxmlLoader.getController()).setStage(stage);
+        ((RegisterUserController) fxmlLoader.getController()).setStage(stage);
         stage.setScene(scene);
         stage.setX(screenSize.getMinX());
         stage.setY(screenSize.getMinY());
