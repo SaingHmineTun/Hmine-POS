@@ -71,6 +71,7 @@ public class PurchasesModel {
     }
 
     public String getSupplierId() {
+        if (this.supplierId.isEmpty()) return "Unknown";
         return supplierId;
     }
 
@@ -104,6 +105,13 @@ public class PurchasesModel {
     }
 
     public String getCreatedAt() {
+        // Show Date Time in user-friendly style!
+        if (!createdAt.isEmpty()) {
+            String[] strings = createdAt.split("T");
+            String date = strings[0];
+            String time = strings[1].substring(0, strings[1].lastIndexOf("."));
+            return date.concat(" ").concat(time);
+        }
         return createdAt;
     }
 

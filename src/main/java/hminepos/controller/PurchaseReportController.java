@@ -1,9 +1,7 @@
 package hminepos.controller;
 
 import hminepos.database.SqliteHelper;
-import hminepos.model.CustomerModel;
-import hminepos.model.SalesModel;
-import hminepos.model.UserModel;
+import hminepos.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,7 +14,7 @@ import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.*;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,11 +23,11 @@ import java.util.stream.Collectors;
  */
 
 
-public class SaleReportController implements Initializable {
+public class PurchaseReportController implements Initializable {
 
 
     @FXML
-    private ComboBox<String> cbCustomer;
+    private ComboBox<String> cbSupplier;
 
     @FXML
     private ComboBox<String> cbUser;
@@ -41,31 +39,31 @@ public class SaleReportController implements Initializable {
     ComboBox<String> cbSelectDate;
 
     @FXML
-    private TableColumn<SalesModel, Double> colAmount;
+    private TableColumn<PurchasesModel, Double> colAmount;
 
     @FXML
-    private TableColumn<SalesModel, String> colCustomer;
+    private TableColumn<PurchasesModel, String> colSupplier;
 
     @FXML
-    private TableColumn<SalesModel, String> colDate;
+    private TableColumn<PurchasesModel, String> colDate;
 
     @FXML
-    private TableColumn<SalesModel, Integer> colNo;
+    private TableColumn<PurchasesModel, Integer> colNo;
 
     @FXML
-    private TableColumn<SalesModel, Double> colPrice;
+    private TableColumn<PurchasesModel, Double> colPrice;
 
     @FXML
-    private TableColumn<SalesModel, String> colProduct;
+    private TableColumn<PurchasesModel, String> colProduct;
 
     @FXML
-    private TableColumn<SalesModel, Integer> colQuantity;
+    private TableColumn<PurchasesModel, Integer> colQuantity;
 
     @FXML
-    private TableColumn<SalesModel, String> colUser;
+    private TableColumn<PurchasesModel, String> colUser;
 
     @FXML
-    private TableColumn<SalesModel, String> colVoucher;
+    private TableColumn<PurchasesModel, String> colVoucher;
 
     @FXML
     private DatePicker dpEnd;
@@ -74,9 +72,9 @@ public class SaleReportController implements Initializable {
     private DatePicker dpStart;
 
     @FXML
-    private TableView<SalesModel> tableView;
+    private TableView<PurchasesModel> tableView;
 
-    private List<SalesModel> salesData;
+    private List<PurchasesModel> purchasesModelList;
 
     @FXML
     private TextField tfTotalAmount;
@@ -96,41 +94,41 @@ public class SaleReportController implements Initializable {
         String strStart = dpStart.getValue().atStartOfDay().toString();
         String strEnd = dpEnd.getValue().atTime(LocalTime.MAX).toString();
         String strVoucher = cbVoucher.getValue();
-        String strCustomer = cbCustomer.getValue();
+        String strSupplier = cbSupplier.getValue();
         String strUser = cbUser.getValue();
         if (fetchFromDB) {
             // Fetch data from Database
-            salesData = SqliteHelper.getSalesData(strStart, strEnd);
+            purchasesModelList = SqliteHelper.getPurchaseData(strStart, strEnd);
             // GROUP BY Java Stream API
             // For Vouchers
-            List<String> voucherList = new ArrayList<>(salesData.stream().collect(Collectors.groupingBy(SalesModel::getVoucher)).keySet());
+            List<String> voucherList = new ArrayList<>(purchasesModelList.stream().collect(Collectors.groupingBy(PurchasesModel::getVoucher)).keySet());
             Collections.sort(voucherList);
             // null is added to see the prompt text
             voucherList.add(0, null);
 
             cbVoucher.setItems(FXCollections.observableArrayList(voucherList));
         }
-        List<SalesModel> filterList = salesData;
+        List<PurchasesModel> filterList = purchasesModelList;
         // Only filter with time FROM Sql
         // Other filtering options are filtered with Java Stream
         if (strVoucher != null) {
             filterList = filterList.stream().filter(salesModel -> salesModel.getVoucher().equals(strVoucher)).collect(Collectors.toList());
         }
-        if (strCustomer != null)
-            filterList = filterList.stream().filter(salesModel -> salesModel.getCustomerId().equals(strCustomer)).collect(Collectors.toList());
+        if (strSupplier != null)
+            filterList = filterList.stream().filter(salesModel -> salesModel.getSupplierId().equals(strSupplier)).collect(Collectors.toList());
         if (strUser != null) {
             filterList = filterList.stream().filter(salesModel -> salesModel.getCreatedBy().equals(strUser)).collect(Collectors.toList());
         }
         tableView.setItems(FXCollections.observableArrayList(filterList));
         tableView.refresh();
-        tfTotalAmount.setText("" + tableView.getItems().stream().mapToDouble(SalesModel::getAmount).sum());
-        tfTotalQuantity.setText("" + tableView.getItems().stream().mapToInt(SalesModel::getQuantity).sum());
+        tfTotalAmount.setText("" + tableView.getItems().stream().mapToDouble(PurchasesModel::getAmount).sum());
+        tfTotalQuantity.setText("" + tableView.getItems().stream().mapToInt(PurchasesModel::getQuantity).sum());
     }
 
     private void setupTableColumValues() {
         colNo.setCellValueFactory(new PropertyValueFactory<>("no"));
         colVoucher.setCellValueFactory(new PropertyValueFactory<>("voucher"));
-        colCustomer.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        colSupplier.setCellValueFactory(new PropertyValueFactory<>("supplierId"));
         colProduct.setCellValueFactory(new PropertyValueFactory<>("productId"));
         colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -146,23 +144,23 @@ public class SaleReportController implements Initializable {
         dpStart.setValue(LocalDate.now());
         dpEnd.setValue(LocalDate.now());
 
-        cbCustomer.getItems().addAll(null, "Unknown");
-        cbCustomer.getItems().addAll(FXCollections.observableArrayList(SqliteHelper.getAllCustomers()).stream().map(CustomerModel::getCustomerId).toList());
+        cbSupplier.getItems().addAll(null, "Unknown");
+        cbSupplier.getItems().addAll(FXCollections.observableArrayList(SqliteHelper.getAllSuppliers()).stream().map(SupplierModel::getSupplierId).toList());
         cbUser.getItems().add(null);
         cbUser.getItems().addAll(FXCollections.observableArrayList(SqliteHelper.getAllUsers().stream().map(UserModel::getUserId).toList()));
 
         cbVoucher.showingProperty().addListener(((observable, hidden, showing) -> {
             if (hidden) {
                 showData(false);
-                System.out.println("User Filter");
+                System.out.println("Voucher Filter");
             }
         }));
 
         // init filter by customers
-        cbCustomer.showingProperty().addListener((observable, hidden, showing) -> {
+        cbSupplier.showingProperty().addListener((observable, hidden, showing) -> {
             if (hidden) {
                 showData(false);
-                System.out.println("Customer Filter");
+                System.out.println("Supplier Filter");
             }
         });
 
@@ -197,8 +195,8 @@ public class SaleReportController implements Initializable {
             cbVoucher.setValue(null);
             callShowData = true;
         }
-        if (cbCustomer.getValue() != null) {
-            cbCustomer.setValue(null);
+        if (cbSupplier.getValue() != null) {
+            cbSupplier.setValue(null);
             callShowData = true;
         }
         if (cbUser.getValue() != null) {

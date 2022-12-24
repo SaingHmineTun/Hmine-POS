@@ -71,6 +71,9 @@ public class HomeController implements Initializable {
         }else if (type == SALE_REPORT) {
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/sale-report.fxml"));
             title = "Sale Reports";
+        } else if (type == PURCHASE_REPORT) {
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/purchase-report.fxml"));
+            title = "Purchase Reports";
         }
         Scene scene = new Scene(fxmlLoader.load(), Perc.getFullWidth(), Perc.p90h());
         stage.setTitle(title);
@@ -101,6 +104,7 @@ public class HomeController implements Initializable {
         createStageFor(SALE_REPORT).show();
     }
 
-    public void handle_purchase_report(MouseEvent mouseEvent) {
+    public void handle_purchase_report(MouseEvent mouseEvent) throws IOException {
+        createStageFor(PURCHASE_REPORT).show();
     }
 }

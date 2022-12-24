@@ -592,4 +592,36 @@ public class SqliteHelper {
         }
         return salesModels;
     }
+
+    public static List<PurchasesModel> getPurchaseData(String strStart, String strEnd) {
+        List<PurchasesModel> purchasesModels = new ArrayList<>();
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            String sql = "SELECT * FROM purchases WHERE created_at > ? AND created_at < ?;";
+            PreparedStatement prep = con.prepareStatement(sql);
+            prep.setString(1, strStart);
+            prep.setString(2, strEnd);
+            ResultSet res = prep.executeQuery();
+            for (int i = 1; res.next(); i ++) {
+                PurchasesModel purchasesModel = new PurchasesModel();
+                purchasesModel.setNo(i);
+                purchasesModel.setVoucher(res.getString("voucher"));
+                purchasesModel.setSupplierId(res.getString("supplier_id"));
+                purchasesModel.setProductId(res.getString("product_id"));
+                purchasesModel.setPrice(res.getDouble("price"));
+                purchasesModel.setQuantity(res.getInt("quantity"));
+                purchasesModel.setCreatedBy(res.getString("created_by"));
+                purchasesModel.setCreatedAt(res.getString("created_at"));
+                purchasesModels.add(purchasesModel);
+            }
+            res.close();
+            prep.close();
+            con.close();
+        } catch (SQLException | ClassNotFoundException throwable) {
+            throwable.printStackTrace();
+        }
+        return purchasesModels;
+    }
 }

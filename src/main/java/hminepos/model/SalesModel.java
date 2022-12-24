@@ -71,6 +71,7 @@ public class SalesModel {
     }
 
     public String getCustomerId() {
+        if (this.customerId.isEmpty()) return "Unknown";
         return customerId;
     }
 
@@ -104,6 +105,13 @@ public class SalesModel {
     }
 
     public String getCreatedAt() {
+        // Show Date Time in user-friendly style!
+        if (!createdAt.isEmpty()) {
+            String[] strings = createdAt.split("T");
+            String date = strings[0];
+            String time = strings[1].substring(0, strings[1].lastIndexOf("."));
+            return date.concat(" ").concat(time);
+        }
         return createdAt;
     }
 
@@ -130,9 +138,10 @@ public class SalesModel {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof ProductModel) {
-            return ((ProductModel)obj).getProductId().equals(getProductId());
+            return ((ProductModel) obj).getProductId().equals(getProductId());
         } else if (obj instanceof SalesModel) {
-            return ((SalesModel)obj).getProductId().equals(getProductId());
-        } return false;
+            return ((SalesModel) obj).getProductId().equals(getProductId());
+        }
+        return false;
     }
 }
