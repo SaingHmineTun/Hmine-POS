@@ -222,24 +222,6 @@ public class SalesController implements Initializable {
 
     private void initProducts() {
         cbProductId.setItems(FXCollections.observableArrayList(SqliteHelper.getAllProducts()));
-        Callback<ListView<ProductModel>, ListCell<ProductModel>> productCellFactory = new Callback<>() {
-            @Override
-            public ListCell<ProductModel> call(ListView<ProductModel> param) {
-                return new ListCell<>() {
-                    @Override
-                    protected void updateItem(ProductModel item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-                            setGraphic(null);
-                        } else {
-                            setText(item.getProductId());
-                        }
-                    }
-                };
-            }
-        };
-        cbProductId.setCellFactory(productCellFactory);
-        cbProductId.setButtonCell(productCellFactory.call(null));
         cbProductId.showingProperty().addListener((observable, hidden, showing) -> {
             if (hidden) {
                 if (cbProductId.getValue() != null) {
@@ -277,25 +259,6 @@ public class SalesController implements Initializable {
     private void initCustomers() {
         cbCustomerId.getItems().add(null);
         cbCustomerId.getItems().addAll(FXCollections.observableArrayList(SqliteHelper.getAllCustomers()));
-        Callback<ListView<CustomerModel>, ListCell<CustomerModel>> cellFactory = new Callback<>() {
-            @Override
-            public ListCell<CustomerModel> call(ListView<CustomerModel> param) {
-                return new ListCell<>() {
-                    @Override
-                    protected void updateItem(CustomerModel item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-//                            setGraphic(null);
-                            setText("Unknown");
-                        } else {
-                            setText(item.getCustomerId());
-                        }
-                    }
-                };
-            }
-        };
-        cbCustomerId.setCellFactory(cellFactory);
-        cbCustomerId.setButtonCell(cellFactory.call(null));
         cbCustomerId.showingProperty().addListener((observable, hidden, showing) -> {
             if (hidden) {
                 if (cbCustomerId.getValue() != null)

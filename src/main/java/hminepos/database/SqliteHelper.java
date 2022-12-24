@@ -561,18 +561,16 @@ public class SqliteHelper {
         return addedRow > 0;
     }
 
-    public static List<SalesModel> getSalesData(LocalDateTime timeStart, LocalDateTime timeEnd) {
+    public static List<SalesModel> getSalesData(String strStart, String strEnd) {
         List<SalesModel> salesModels = new ArrayList<>();
         try {
             if (con == null || con.isClosed()) {
                 getConnection();
             }
-            System.out.println("TIME START : " + timeStart.toString());
-            System.out.println("TIME END : " + timeEnd.toString());
             String sql = "SELECT * FROM sales WHERE created_at > ? AND created_at < ?;";
             PreparedStatement prep = con.prepareStatement(sql);
-            prep.setString(1, timeStart.toString());
-            prep.setString(2, timeEnd.toString());
+            prep.setString(1, strStart);
+            prep.setString(2, strEnd);
             ResultSet res = prep.executeQuery();
             for (int i = 1; res.next(); i ++) {
                 SalesModel salesModel = new SalesModel();

@@ -17,7 +17,7 @@
                 <DatePicker fx:id="dpEnd" editable="false" maxHeight="35.0" maxWidth="150.0" promptText="To" />
                 <SearchableComboBox fx:id="cbVoucher" maxHeight="35.0" maxWidth="150.0" minHeight="35.0" prefWidth="150.0" promptText="Voucher" />
                 <SearchableComboBox fx:id="cbCustomer" layoutX="345.0" layoutY="23.0" maxHeight="35.0" maxWidth="150.0" prefWidth="150.0" promptText="Customer" /><SearchableComboBox fx:id="cbUser" maxHeight="35.0" maxWidth="150.0" prefWidth="150.0" promptText="User" />
-                <MFXButton onAction="#handleFilter" prefWidth="80.0" styleClass="info" text="Filter" />
+                <MFXButton onAction="#handleClearFilter" prefWidth="80.0" styleClass="danger" text="Clear Filter" />
             </children>
             <padding>
                 <Insets left="15.0" />

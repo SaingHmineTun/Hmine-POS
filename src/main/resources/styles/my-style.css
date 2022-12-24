@@ -36,7 +36,7 @@
 }
 
 * {
-    -fx-font-family: 'MM Ethnic';
+    -fx-font-family: 'Cherry Unicode';
 	-fx-font-size: 15px;
 }
 
@@ -53,14 +53,14 @@
 }
 
 .mfx-text-field {
-	-fx-font-family: 'MM Ethnic';
+	-fx-font-family: 'Cherry Unicode';
 	-fx-font-size: 16px;
 	-fx-border-color: -mfx-charcoal;
 	-fx-text-fill: #111;
 }
 
 .mfx-text-field .floating-text {
-	-fx-font-family: 'MM Ethnic';
+	-fx-font-family: 'Cherry Unicode';
 	-fx-text-fill: -mfx-charcoal;
 }
 

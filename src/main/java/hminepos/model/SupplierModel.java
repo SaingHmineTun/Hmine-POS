@@ -79,4 +79,9 @@ public class SupplierModel {
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public String toString() {
+        return this.supplierId;
+    }
 }

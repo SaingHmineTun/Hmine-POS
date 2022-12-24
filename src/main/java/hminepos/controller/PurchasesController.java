@@ -221,25 +221,6 @@ public class PurchasesController implements Initializable {
     private void initSuppliers() {
         cbSupplierId.getItems().add(null);
         cbSupplierId.getItems().addAll(FXCollections.observableArrayList(SqliteHelper.getAllSuppliers()));
-        Callback<ListView<SupplierModel>, ListCell<SupplierModel>> cellFactory = new Callback<>() {
-            @Override
-            public ListCell<SupplierModel> call(ListView<SupplierModel> param) {
-                return new ListCell<>() {
-                    @Override
-                    protected void updateItem(SupplierModel item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-//                            setGraphic(null);
-                            setText("Unknown");
-                        } else {
-                            setText(item.getSupplierId());
-                        }
-                    }
-                };
-            }
-        };
-        cbSupplierId.setCellFactory(cellFactory);
-        cbSupplierId.setButtonCell(cellFactory.call(null));
         cbSupplierId.showingProperty().addListener((observable, hidden, showing) -> {
             if (hidden) {
                 if (cbSupplierId.getValue() != null)

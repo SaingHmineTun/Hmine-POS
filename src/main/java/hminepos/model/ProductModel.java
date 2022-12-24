@@ -81,6 +81,11 @@ public class ProductModel {
 
 
     @Override
+    public String toString() {
+        return this.productId;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof ProductModel)
             return ((ProductModel) obj).getProductId().equals(getProductId());
