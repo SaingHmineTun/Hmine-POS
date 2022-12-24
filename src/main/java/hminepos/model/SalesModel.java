@@ -4,7 +4,6 @@ package hminepos.model;
  * Created by Mao on 12/17/2022.
  */
 
-
 public class SalesModel {
     private int no;
 
@@ -71,7 +70,6 @@ public class SalesModel {
     }
 
     public String getCustomerId() {
-        if (this.customerId.isEmpty()) return "Unknown";
         return customerId;
     }
 
@@ -105,13 +103,6 @@ public class SalesModel {
     }
 
     public String getCreatedAt() {
-        // Show Date Time in user-friendly style!
-        if (!createdAt.isEmpty()) {
-            String[] strings = createdAt.split("T");
-            String date = strings[0];
-            String time = strings[1].substring(0, strings[1].lastIndexOf("."));
-            return date.concat(" ").concat(time);
-        }
         return createdAt;
     }
 
