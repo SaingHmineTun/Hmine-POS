@@ -41,5 +41,5 @@ after buying, the quantity of your product will increase.
 
 That's all for the software.
 
-Best regards,
-Sai Saing Hmine Tun
+
+By Sai Saing Hmine Tun
