@@ -1,5 +1,5 @@
 # Hmine POS
-Final Project for CS50
+**Final Project for CS50**
 
 This software is developed using JavaFX. Therefore, any computers that can run Java (installed JDK or JRE) can run this software.
 
@@ -14,11 +14,11 @@ This software is named Hmine POS. This is a mini computer software for buying an
 7. Sale Report (View history about sales)
 8. Purchase Report (View history about purchases)
 
-How it works? 
+***How it works?***<br>
 Launching the software will show you Login page first. If you do not have user account yet, you may easily create one. Just clike Register User and create one.
 After  creating the user, enter the user id and password and then click the Login button.
 
-When you successfully login, you will be introduced with Home Page. From there you will see all of the available features.
+When you successfully login, you will be introduced with Home Page. From there you will see all the available features.
 
 If you want to use it immediately, the only necessary thing is to add products. Customer and Supplier are optional. You can make buying/selling without having them registered.
 
@@ -29,7 +29,7 @@ After adding products successfully, you are now ready to buy/sell goods. Click S
 Purchase goods or services is very similar to Selling. The only major difference is that after buying, the quantity of your product will increase.
 
 If you want to see the actions you and other users made about sales, you can watch them at Sale Report. You can filter and watch them by Date, by Customer, by User or by Voucher. 
-For buying, yoh can watch them at Purchase Report.
-
+For buying, yoh can watch them at Purchase Report.<br>
 That's all for the software.
-By Sai Saing Hmine Tun
+
+Best Regards, <br> Sai Saing Hmine Tun

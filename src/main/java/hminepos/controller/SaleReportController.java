@@ -2,6 +2,7 @@ package hminepos.controller;
 
 import hminepos.database.SqliteHelper;
 import hminepos.model.CustomerModel;
+import hminepos.model.PurchasesModel;
 import hminepos.model.SalesModel;
 import hminepos.model.UserModel;
 import javafx.collections.FXCollections;
@@ -11,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.time.DayOfWeek;
@@ -116,8 +118,12 @@ public class SaleReportController implements Initializable {
         if (strVoucher != null) {
             filterList = filterList.stream().filter(salesModel -> salesModel.getVoucher().equals(strVoucher)).collect(Collectors.toList());
         }
-        if (strCustomer != null)
-            filterList = filterList.stream().filter(salesModel -> salesModel.getCustomerId().equals(strCustomer)).collect(Collectors.toList());
+        if (strCustomer != null) {
+            // If getValue is "Unknown", change it to empty string
+            if (strCustomer.equalsIgnoreCase("unknown")) strCustomer = "";
+            String finalStrCustomer = strCustomer;
+            filterList = filterList.stream().filter(salesModel -> salesModel.getCustomerId().equals(finalStrCustomer)).collect(Collectors.toList());
+        }
         if (strUser != null) {
             filterList = filterList.stream().filter(salesModel -> salesModel.getCreatedBy().equals(strUser)).collect(Collectors.toList());
         }
@@ -131,12 +137,48 @@ public class SaleReportController implements Initializable {
         colNo.setCellValueFactory(new PropertyValueFactory<>("no"));
         colVoucher.setCellValueFactory(new PropertyValueFactory<>("voucher"));
         colCustomer.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        // Most rows will not have customer id
+        // Because items are sold without specifying them
+        // So I make empty customer id to show "Unknown" values
+        Callback<TableColumn<SalesModel,String>, TableCell<SalesModel,String>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<SalesModel, String> call(TableColumn<SalesModel, String> param) {
+                return new TableCell<>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) setGraphic(null);
+                        else if (item.isEmpty()) setText("Unknown");
+                        else setText(item);
+                    }
+                };
+            }
+        };
+        colCustomer.setCellFactory(cellFactory);
         colProduct.setCellValueFactory(new PropertyValueFactory<>("productId"));
         colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         colUser.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
+        colDate.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<SalesModel, String> call(TableColumn<SalesModel, String> param) {
+                return new TableCell<>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) setGraphic(null);
+                        else {
+                            String dateValue = item.split("T")[0];
+                            String timeValue = item.split("T")[1];
+                            if (timeValue.contains(".")) timeValue = timeValue.substring(0, timeValue.lastIndexOf("."));
+                            setText(dateValue.concat(" ").concat(timeValue));
+                        }
+                    }
+                };
+            }
+        });
     }
 
     private void initComponents() {
@@ -211,7 +253,6 @@ public class SaleReportController implements Initializable {
     }
 
     public void handleSelectDate(ActionEvent actionEvent) {
-        System.out.println("Index: " + cbSelectDate.getSelectionModel().getSelectedIndex());
         int selectedIndex = cbSelectDate.getSelectionModel().getSelectedIndex();
         switch (selectedIndex) {
             case 0 -> {

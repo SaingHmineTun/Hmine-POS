@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.time.DayOfWeek;
@@ -114,8 +115,13 @@ public class PurchaseReportController implements Initializable {
         if (strVoucher != null) {
             filterList = filterList.stream().filter(salesModel -> salesModel.getVoucher().equals(strVoucher)).collect(Collectors.toList());
         }
-        if (strSupplier != null)
-            filterList = filterList.stream().filter(salesModel -> salesModel.getSupplierId().equals(strSupplier)).collect(Collectors.toList());
+
+        if (strSupplier != null) {
+            // If getValue is "Unknown", change it to empty string
+            if (strSupplier.equalsIgnoreCase("unknown")) strSupplier = "";
+            String finalStrSupplier = strSupplier;
+            filterList = filterList.stream().filter(salesModel -> salesModel.getSupplierId().equals(finalStrSupplier)).collect(Collectors.toList());
+        }
         if (strUser != null) {
             filterList = filterList.stream().filter(salesModel -> salesModel.getCreatedBy().equals(strUser)).collect(Collectors.toList());
         }
@@ -129,12 +135,44 @@ public class PurchaseReportController implements Initializable {
         colNo.setCellValueFactory(new PropertyValueFactory<>("no"));
         colVoucher.setCellValueFactory(new PropertyValueFactory<>("voucher"));
         colSupplier.setCellValueFactory(new PropertyValueFactory<>("supplierId"));
+        colSupplier.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<PurchasesModel, String> call(TableColumn<PurchasesModel, String> param) {
+                return new TableCell<>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) setGraphic(null);
+                        else if (item.isEmpty()) setText("Unknown");
+                        else setText(item);
+                    }
+                };
+            }
+        });
         colProduct.setCellValueFactory(new PropertyValueFactory<>("productId"));
         colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         colUser.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
+        colDate.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<PurchasesModel, String> call(TableColumn<PurchasesModel, String> param) {
+                return new TableCell<>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) setGraphic(null);
+                        else {
+                            String dateValue = item.split("T")[0];
+                            String timeValue = item.split("T")[1];
+                            if (timeValue.contains(".")) timeValue = timeValue.substring(0, timeValue.lastIndexOf("."));
+                            setText(dateValue.concat(" ").concat(timeValue));
+                        }
+                    }
+                };
+            }
+        });
     }
 
     private void initComponents() {
