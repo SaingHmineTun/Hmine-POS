@@ -2,7 +2,7 @@ package hminepos.controller;
 
 import com.password4j.Hash;
 import com.password4j.Password;
-import hminepos.database.SqliteHelper;
+import hminepos.database.DatabaseHelper;
 import hminepos.helper.ImageEncoder;
 import hminepos.helper.ImageResizer;
 import hminepos.model.UserModel;
@@ -72,7 +72,7 @@ public class RegisterUserController implements Initializable {
         }
 
         // Check UserId, if already existed, it must fail to register!
-        if (SqliteHelper.getUserById(tfUserId.getText()) != null) {
+        if (DatabaseHelper.getUserById(tfUserId.getText()) != null) {
             showLabelStatus("User ID already existed!");
         }
 
@@ -118,7 +118,7 @@ public class RegisterUserController implements Initializable {
             // Resize image to 128w/128h
             user.setImage(resizeImage());
         }
-        if (SqliteHelper.addUser(user)) {
+        if (DatabaseHelper.addUser(user)) {
             // Register Success! Leave to Login
             handleGotoLogin(null);
         }

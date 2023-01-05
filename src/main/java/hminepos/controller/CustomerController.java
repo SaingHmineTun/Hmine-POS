@@ -1,13 +1,10 @@
 package hminepos.controller;
 
-import com.password4j.Hash;
-import com.password4j.Password;
-import hminepos.database.SqliteHelper;
+import hminepos.database.DatabaseHelper;
+import hminepos.database.DatabaseHelper;
 import hminepos.helper.ImageEncoder;
-import hminepos.helper.ImageResizer;
 import hminepos.helper.Utils;
 import hminepos.model.CustomerModel;
-import hminepos.model.UserModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
@@ -28,8 +25,6 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -142,7 +137,7 @@ public class CustomerController implements Initializable {
         setupSelectTableRow();
         setupTableFiltering();
 
-        allCustomers = FXCollections.observableArrayList(SqliteHelper.getAllCustomers());
+        allCustomers = FXCollections.observableArrayList(DatabaseHelper.getAllCustomers());
         tableCustomers.setItems(allCustomers);
     }
 
@@ -236,12 +231,12 @@ public class CustomerController implements Initializable {
         /*
         UserModel object is ready! Let's add to the database!!!
          */
-        SqliteHelper.addCustomer(customer);
+        DatabaseHelper.addCustomer(customer);
         refreshTable();
     }
 
     private void refreshTable() {
-        allCustomers = FXCollections.observableArrayList(SqliteHelper.getAllCustomers());
+        allCustomers = FXCollections.observableArrayList(DatabaseHelper.getAllCustomers());
         tableCustomers.setItems(allCustomers);
     }
 
@@ -259,7 +254,7 @@ public class CustomerController implements Initializable {
         }
         if (isUpdatedPicture || validForUpdate(customer)) {
             // Ready to update into database
-            SqliteHelper.updateCustomer(customer);
+            DatabaseHelper.updateCustomer(customer);
             refreshTable();
         }
     }

@@ -1,20 +1,35 @@
 package hminepos.database;
 
+import com.google.gson.Gson;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.*;
 import hminepos.helper.Type;
 import hminepos.helper.Utils;
 import hminepos.model.*;
+import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 /**
  * Created by Mao on 12/2/2022.
+ * Get Customers use Local
  */
 
 
-public class SqliteHelper {
+public class DatabaseHelper {
 
     private static Connection con;
 
@@ -146,34 +161,26 @@ public class SqliteHelper {
 
     /* Customer SCOPE */
 
+    // PHP with Xampp & localhost
     public static List<CustomerModel> getAllCustomers() {
-        List<CustomerModel> allCustomers = new ArrayList<>();
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost/php-crud/customer-api.php"))
+                .header("Content-type","application/json")
+                .GET() // GET is default
+                .build();
+
+        HttpResponse<String> response = null;
         try {
-            if (con == null || con.isClosed()) {
-                getConnection();
-            }
-            String sql = "SELECT * FROM customers;";
-            PreparedStatement prep = con.prepareStatement(sql);
-            ResultSet res = prep.executeQuery();
-            while (res.next()) {
-                CustomerModel customer = new CustomerModel();
-                customer.setCustomerId(res.getString("customer_id"));
-                customer.setCustomerName(res.getString("customer_name"));
-                customer.setPhone(res.getString("phone"));
-                customer.setEmail(res.getString("email"));
-                customer.setAddress(res.getString("address"));
-                customer.setImage(res.getString("image"));
-                customer.setCreatedBy(res.getString("created_by"));
-                customer.setCreatedAt(res.getString("created_at"));
-                allCustomers.add(customer);
-            }
-            res.close();
-            prep.close();
-            con.close();
-        } catch (SQLException | ClassNotFoundException throwable) {
-            throwable.printStackTrace();
+            response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+            Gson gson = new Gson();
+            CustomerModel[] customerModels = gson.fromJson(response.body(), CustomerModel[].class);
+            System.out.println(response.body());
+            return Arrays.asList(customerModels);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        return allCustomers;
     }
 
     public static boolean addCustomer(CustomerModel customer) {
@@ -240,101 +247,75 @@ public class SqliteHelper {
 
     /* STARTED Supplier Scope */
     public static List<SupplierModel> getAllSuppliers() {
-        List<SupplierModel> allSuppliers = new ArrayList<>();
-        try {
-            if (con == null || con.isClosed()) {
-                getConnection();
-            }
-            String sql = "SELECT * FROM suppliers;";
-            PreparedStatement prep = con.prepareStatement(sql);
-            ResultSet res = prep.executeQuery();
-            while (res.next()) {
-                SupplierModel supplier = new SupplierModel();
-                supplier.setSupplierId(res.getString("supplier_id"));
-                supplier.setSupplierName(res.getString("supplier_name"));
-                supplier.setAddress(res.getString("address"));
-                supplier.setPhone(res.getString("phone"));
-                supplier.setEmail(res.getString("email"));
-                supplier.setImage(res.getString("image"));
-                supplier.setCreatedBy(res.getString("created_by"));
-                supplier.setCreatedAt(res.getString("created_at"));
-                allSuppliers.add(supplier);
-            }
-            res.close();
-            prep.close();
-            con.close();
-        } catch (SQLException | ClassNotFoundException throwable) {
-            throwable.printStackTrace();
+        //This registry is required for your Mongo document to POJO conversion
+        CodecRegistry defaultCodecRegistry = MongoClientSettings.getDefaultCodecRegistry();
+        PojoCodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
+        CodecRegistry pojoCodecRegistry = fromRegistries(defaultCodecRegistry, fromProviders(pojoCodecProvider));
+
+        MongoClient client = MongoClients.create("mongodb+srv://saimao:root@hminepos.i8aul9l.mongodb.net/?retryWrites=true&w=majority");
+        MongoDatabase database = client.getDatabase("HminePOS");
+        database = database.withCodecRegistry(pojoCodecRegistry);
+        MongoCollection<SupplierModel> suppliers = database.getCollection("suppliers", SupplierModel.class);
+        List<SupplierModel> supplierList = new ArrayList<>();
+        for (SupplierModel supplierModel : suppliers.find()) {
+            supplierList.add(supplierModel);
+
         }
-        return allSuppliers;
+        return supplierList;
     }
 
     public static boolean addSupplier(SupplierModel supplier) {
+        //This registry is required for your Mongo document to POJO conversion
+        CodecRegistry defaultCodecRegistry = MongoClientSettings.getDefaultCodecRegistry();
+        PojoCodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
+        CodecRegistry pojoCodecRegistry = fromRegistries(defaultCodecRegistry, fromProviders(pojoCodecProvider));
 
-        String sql = "INSERT INTO suppliers (supplier_id,supplier_name,address,phone,email,image,created_by,created_at) VALUES(?,?,?,?,?,?,?,?);";
-
-        int addedRow = 0;
-        try {
-            if (con == null || con.isClosed()) {
-                getConnection();
-            }
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, supplier.getSupplierId());
-            pstmt.setString(2, supplier.getSupplierName());
-            pstmt.setString(3, supplier.getAddress());
-            pstmt.setString(4, supplier.getPhone());
-            pstmt.setString(5, supplier.getEmail());
-            pstmt.setString(6, supplier.getImage());
-            pstmt.setString(7, supplier.getCreatedBy());
-            pstmt.setString(8, supplier.getCreatedAt());
-            addedRow = pstmt.executeUpdate();
-            pstmt.close();
-            con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return addedRow > 0;
+        MongoClient client = MongoClients.create("mongodb+srv://saimao:root@hminepos.i8aul9l.mongodb.net/?retryWrites=true&w=majority");
+        MongoDatabase database = client.getDatabase("HminePOS");
+        database = database.withCodecRegistry(pojoCodecRegistry);
+        MongoCollection<SupplierModel> suppliers = database.getCollection("suppliers", SupplierModel.class);
+        boolean b = suppliers.insertOne(supplier).wasAcknowledged();
+        System.out.println("Was Acknowledge : " + b);
+        return b;
     }
 
     public static boolean updateSupplier(SupplierModel supplier) {
-        String sql = "UPDATE suppliers SET supplier_name=?,address=?,phone=?,email=?,image=? WHERE supplier_id=?";
 
-        int updatedRow = 0;
+        //This registry is required for your Mongo document to POJO conversion
+        CodecRegistry defaultCodecRegistry = MongoClientSettings.getDefaultCodecRegistry();
+        PojoCodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
+        CodecRegistry pojoCodecRegistry = fromRegistries(defaultCodecRegistry, fromProviders(pojoCodecProvider));
 
-        try {
-            if (con == null || con.isClosed()) {
-                getConnection();
-            }
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            // set the corresponding param
-            pstmt.setString(1, supplier.getSupplierName());
-            pstmt.setString(2, supplier.getAddress());
-            pstmt.setString(3, supplier.getPhone());
-            pstmt.setString(4, supplier.getEmail());
-            pstmt.setString(5, supplier.getImage());
-            pstmt.setString(6, supplier.getSupplierId());
-            // update
-            updatedRow = pstmt.executeUpdate();
-            pstmt.close();
-            con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return updatedRow > 0;
+
+        MongoClient client = MongoClients.create("mongodb+srv://saimao:root@hminepos.i8aul9l.mongodb.net/?retryWrites=true&w=majority");
+        MongoDatabase database = client.getDatabase("HminePOS");
+
+        database = database.withCodecRegistry(pojoCodecRegistry);
+        MongoCollection<SupplierModel> suppliers = database.getCollection("suppliers", SupplierModel.class);
+        Document query = new Document();
+        query.append("supplier_id",supplier.getSupplierId());
+        Document setData = new Document();
+        setData.append("supplier_name", supplier.getSupplierName())
+                .append("address", supplier.getAddress())
+                .append("phone", supplier.getPhone())
+                .append("email", supplier.getEmail())
+                .append("image", supplier.getImage());
+        Document update = new Document();
+        update.append("$set", setData);
+        //To update single Document
+        return suppliers.updateOne(query, update).wasAcknowledged();
     }
 
 
-    // STARTED PRODUCT SCOPE //
+    // TODO : Connect with infinity server //
     public static List<ProductModel> getAllProducts() {
         List<ProductModel> allProducts = new ArrayList<>();
         try {
-            if (con == null || con.isClosed()) {
-                getConnection();
-            }
+            // sqlite driver
+            Class.forName("org.sqlite.JDBC");
+            // database path, if it's a new database
+            con = DriverManager.getConnection("jdbc:sqlite:" + System.getProperty("user.dir") + "\\HminePOS.db");
+
             String sql = "SELECT * FROM products;";
             PreparedStatement prep = con.prepareStatement(sql);
             ResultSet res = prep.executeQuery();

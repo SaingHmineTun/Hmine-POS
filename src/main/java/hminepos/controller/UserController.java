@@ -3,7 +3,7 @@ package hminepos.controller;
 import com.jfoenix.controls.JFXButton;
 import com.password4j.Hash;
 import com.password4j.Password;
-import hminepos.database.SqliteHelper;
+import hminepos.database.DatabaseHelper;
 import hminepos.helper.ImageEncoder;
 import hminepos.helper.ImageResizer;
 import hminepos.helper.Utils;
@@ -107,7 +107,7 @@ public class UserController implements Initializable {
         setupSelectTableRow();
         setupTableFiltering();
         setupTextFieldListeners();
-        allUsers = FXCollections.observableArrayList(SqliteHelper.getAllUsers());
+        allUsers = FXCollections.observableArrayList(DatabaseHelper.getAllUsers());
         tableUsers.setItems(allUsers);
     }
 
@@ -253,7 +253,7 @@ public class UserController implements Initializable {
         }
 
         // Check UserId, if already existed, it must fail to register!
-        if (SqliteHelper.getUserById(tfUserId.getText()) != null) {
+        if (DatabaseHelper.getUserById(tfUserId.getText()) != null) {
             tfUserId.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, true);
             lbUserId.setText("User ID already existed!");
             lbUserId.setVisible(true);
@@ -296,7 +296,7 @@ public class UserController implements Initializable {
         /*
         UserModel object is ready! Let's add to the database!!!
          */
-        SqliteHelper.addUser(user);
+        DatabaseHelper.addUser(user);
         refreshTable();
 
     }
@@ -315,7 +315,7 @@ public class UserController implements Initializable {
         }
         if (isUpdatedPicture || validForUpdate(user)) {
             // Ready to update into database
-            SqliteHelper.updateUser(user);
+            DatabaseHelper.updateUser(user);
             refreshTable();
         }
     }
@@ -325,7 +325,7 @@ public class UserController implements Initializable {
     }
 
     private void refreshTable() {
-        allUsers = FXCollections.observableArrayList(SqliteHelper.getAllUsers());
+        allUsers = FXCollections.observableArrayList(DatabaseHelper.getAllUsers());
         tableUsers.setItems(allUsers);
     }
 

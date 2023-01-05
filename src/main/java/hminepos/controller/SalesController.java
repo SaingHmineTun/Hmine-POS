@@ -1,6 +1,6 @@
 package hminepos.controller;
 
-import hminepos.database.SqliteHelper;
+import hminepos.database.DatabaseHelper;
 import hminepos.helper.ItemQuantity;
 import hminepos.helper.Type;
 import hminepos.helper.Utils;
@@ -103,12 +103,12 @@ public class SalesController implements Initializable {
             sale.setCustomerId(cbCustomerId.getValue() == null ? "" : cbCustomerId.getValue().getCustomerId());
             System.out.println(sale);
             // #1 Subtract quantity from products table
-            if (SqliteHelper.subtractProducts(sale))
+            if (DatabaseHelper.subtractProducts(sale))
                 // #2 Add the record to the sales table
-                SqliteHelper.addSales(sale);
+                DatabaseHelper.addSales(sale);
         }
         // After finishing adding all items, close the connection!
-        SqliteHelper.closeConnection();
+        DatabaseHelper.closeConnection();
         prepareToSellAgain();
 
     }
@@ -126,7 +126,7 @@ public class SalesController implements Initializable {
         btSell.setDisable(true);
         // After finish selling one time, to get the remaining quantity of our products
         // We must refresh cbProductId once again!!!
-        cbProductId.setItems(FXCollections.observableArrayList(SqliteHelper.getAllProducts()));
+        cbProductId.setItems(FXCollections.observableArrayList(DatabaseHelper.getAllProducts()));
     }
 
 
@@ -221,7 +221,7 @@ public class SalesController implements Initializable {
     }
 
     private void initProducts() {
-        cbProductId.setItems(FXCollections.observableArrayList(SqliteHelper.getAllProducts()));
+        cbProductId.setItems(FXCollections.observableArrayList(DatabaseHelper.getAllProducts()));
         cbProductId.showingProperty().addListener((observable, hidden, showing) -> {
             if (hidden) {
                 if (cbProductId.getValue() != null) {
@@ -258,7 +258,7 @@ public class SalesController implements Initializable {
 
     private void initCustomers() {
         cbCustomerId.getItems().add(null);
-        cbCustomerId.getItems().addAll(FXCollections.observableArrayList(SqliteHelper.getAllCustomers()));
+        cbCustomerId.getItems().addAll(FXCollections.observableArrayList(DatabaseHelper.getAllCustomers()));
         cbCustomerId.showingProperty().addListener((observable, hidden, showing) -> {
             if (hidden) {
                 if (cbCustomerId.getValue() != null)
@@ -271,7 +271,7 @@ public class SalesController implements Initializable {
 
     private String getVoucherNumber() throws ParseException {
         // Detect from Database here
-        String theLastVoucherFromDatabase = SqliteHelper.getTheLastVoucher(Type.SALE);
+        String theLastVoucherFromDatabase = DatabaseHelper.getTheLastVoucher(Type.SALE);
         boolean isToday = Utils.isVoucherToday(theLastVoucherFromDatabase);
         if (isToday) {
             int voucherNumber = Utils.extractVoucherNumber(theLastVoucherFromDatabase);

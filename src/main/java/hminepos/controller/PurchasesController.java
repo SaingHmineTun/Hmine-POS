@@ -1,6 +1,6 @@
 package hminepos.controller;
 
-import hminepos.database.SqliteHelper;
+import hminepos.database.DatabaseHelper;
 import hminepos.helper.*;
 import hminepos.model.*;
 import javafx.collections.FXCollections;
@@ -116,7 +116,7 @@ public class PurchasesController implements Initializable {
 
     private String getVoucherNumber() throws ParseException {
         // Detect from Database here
-        String theLastVoucherFromDatabase = SqliteHelper.getTheLastVoucher(Type.PURCHASE);
+        String theLastVoucherFromDatabase = DatabaseHelper.getTheLastVoucher(Type.PURCHASE);
         boolean isToday = Utils.isVoucherToday(theLastVoucherFromDatabase);
         if (isToday) {
             int voucherNumber = Utils.extractVoucherNumber(theLastVoucherFromDatabase);
@@ -158,7 +158,7 @@ public class PurchasesController implements Initializable {
     }
 
     private void initProducts() {
-        cbProductId.setItems(FXCollections.observableArrayList(SqliteHelper.getAllProducts()));
+        cbProductId.setItems(FXCollections.observableArrayList(DatabaseHelper.getAllProducts()));
         Callback<ListView<ProductModel>, ListCell<ProductModel>> productCellFactory = new Callback<>() {
             @Override
             public ListCell<ProductModel> call(ListView<ProductModel> param) {
@@ -220,7 +220,7 @@ public class PurchasesController implements Initializable {
 
     private void initSuppliers() {
         cbSupplierId.getItems().add(null);
-        cbSupplierId.getItems().addAll(FXCollections.observableArrayList(SqliteHelper.getAllSuppliers()));
+        cbSupplierId.getItems().addAll(FXCollections.observableArrayList(DatabaseHelper.getAllSuppliers()));
         cbSupplierId.showingProperty().addListener((observable, hidden, showing) -> {
             if (hidden) {
                 if (cbSupplierId.getValue() != null)
@@ -265,12 +265,12 @@ public class PurchasesController implements Initializable {
             purchase.setSupplierId(cbSupplierId.getValue() == null ? "" : cbSupplierId.getValue().getSupplierId());
             System.out.println(purchase);
             // #1 Subtract quantity from products table
-            if (SqliteHelper.increaseProduct(purchase))
+            if (DatabaseHelper.increaseProduct(purchase))
                 // #2 Add the record to the sales table
-                SqliteHelper.addPurchase(purchase);
+                DatabaseHelper.addPurchase(purchase);
         }
         // After finishing adding all items, close the connection!
-        SqliteHelper.closeConnection();
+        DatabaseHelper.closeConnection();
         prepareToPurchaseAgain();
     }
 
@@ -284,6 +284,6 @@ public class PurchasesController implements Initializable {
         tfVoucher.setText(getVoucherNumber());
         // After finish selling one time, to get the remaining quantity of our products
         // We must refresh cbProductId once again!!!
-        cbProductId.setItems(FXCollections.observableArrayList(SqliteHelper.getAllProducts()));
+        cbProductId.setItems(FXCollections.observableArrayList(DatabaseHelper.getAllProducts()));
     }
 }

@@ -1,19 +1,30 @@
 package hminepos.model;
 
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+
 /**
  * Created by Mao on 12/16/2022.
  */
 
-
+@BsonDiscriminator
 public class SupplierModel {
 
+    @BsonProperty("supplier_id")
     private String supplierId;
+    @BsonProperty("supplier_name")
     private String supplierName;
+    @BsonProperty("address")
     private String address;
+    @BsonProperty("phone")
     private String phone;
+    @BsonProperty("email")
     private String email;
+    @BsonProperty("image")
     private String image;
+    @BsonProperty("created_by")
     private String createdBy;
+    @BsonProperty("created_at")
     private String createdAt;
 
     public String getSupplierId() {
@@ -77,6 +88,20 @@ public class SupplierModel {
     }
 
     public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public SupplierModel() {
+    }
+
+    public SupplierModel(String supplierId, String supplierName, String address, String phone, String email, String image, String createdBy, String createdAt) {
+        this.supplierId = supplierId;
+        this.supplierName = supplierName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.image = image;
+        this.createdBy = createdBy;
         this.createdAt = createdAt;
     }
 

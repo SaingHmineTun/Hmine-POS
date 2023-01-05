@@ -1,7 +1,7 @@
 package hminepos.controller;
 
 import com.jfoenix.controls.JFXButton;
-import hminepos.database.SqliteHelper;
+import hminepos.database.DatabaseHelper;
 import hminepos.helper.ImageEncoder;
 import hminepos.helper.ImageResizer;
 import hminepos.helper.Utils;
@@ -136,12 +136,12 @@ public class ProductController implements Initializable {
         /*
         SupplierModel object is ready! Let's add to the database!!!
          */
-        SqliteHelper.addProduct(product);
+        DatabaseHelper.addProduct(product);
         refreshTable();
     }
 
     private void refreshTable() {
-        allProducts = FXCollections.observableArrayList(SqliteHelper.getAllProducts());
+        allProducts = FXCollections.observableArrayList(DatabaseHelper.getAllProducts());
         tableProducts.setItems(allProducts);
     }
 
@@ -181,7 +181,7 @@ public class ProductController implements Initializable {
         }
         if (isUpdatedPicture || validForUpdate(product)) {
             // Ready to update into database
-            SqliteHelper.updateProduct(product);
+            DatabaseHelper.updateProduct(product);
             refreshTable();
         }
     }
@@ -200,7 +200,7 @@ public class ProductController implements Initializable {
         setupSelectTableRow();
         setupTableFiltering();
 
-        allProducts = FXCollections.observableArrayList(SqliteHelper.getAllProducts());
+        allProducts = FXCollections.observableArrayList(DatabaseHelper.getAllProducts());
         tableProducts.setItems(allProducts);
     }
 

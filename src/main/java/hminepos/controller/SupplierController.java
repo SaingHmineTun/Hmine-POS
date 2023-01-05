@@ -1,11 +1,10 @@
 package hminepos.controller;
 
 import com.jfoenix.controls.JFXButton;
-import hminepos.database.SqliteHelper;
+import hminepos.database.DatabaseHelper;
+import hminepos.database.DatabaseHelper;
 import hminepos.helper.ImageEncoder;
-import hminepos.helper.ImageResizer;
 import hminepos.helper.Utils;
-import hminepos.model.CustomerModel;
 import hminepos.model.SupplierModel;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
@@ -26,8 +25,6 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -139,7 +136,7 @@ public class SupplierController implements Initializable {
         }
         if (isUpdatedPicture || validForUpdate(supplier)) {
             // Ready to update into database
-            SqliteHelper.updateSupplier(supplier);
+            DatabaseHelper.updateSupplier(supplier);
             refreshTable();
         }
     }
@@ -160,7 +157,7 @@ public class SupplierController implements Initializable {
         setupSelectTableRow();
         setupTableFiltering();
 
-        allSuppliers = FXCollections.observableArrayList(SqliteHelper.getAllSuppliers());
+        allSuppliers = FXCollections.observableArrayList(DatabaseHelper.getAllSuppliers());
         tableSuppliers.setItems(allSuppliers);
     }
 
@@ -252,12 +249,12 @@ public class SupplierController implements Initializable {
         /*
         SupplierModel object is ready! Let's add to the database!!!
          */
-        SqliteHelper.addSupplier(supplier);
+        DatabaseHelper.addSupplier(supplier);
         refreshTable();
     }
 
     private void refreshTable() {
-        allSuppliers = FXCollections.observableArrayList(SqliteHelper.getAllSuppliers());
+        allSuppliers = FXCollections.observableArrayList(DatabaseHelper.getAllSuppliers());
         tableSuppliers.setItems(allSuppliers);
     }
 

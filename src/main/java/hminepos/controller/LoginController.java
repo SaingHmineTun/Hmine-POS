@@ -1,6 +1,6 @@
 package hminepos.controller;
 
-import hminepos.database.SqliteHelper;
+import hminepos.database.DatabaseHelper;
 import hminepos.helper.Utils;
 import hminepos.model.UserModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -63,7 +63,7 @@ public class LoginController implements Initializable {
             return;
         }
 
-        UserModel user = SqliteHelper.getUserById(userId);
+        UserModel user = DatabaseHelper.getUserById(userId);
 
         // Check whether user is null
         if (user == null) {

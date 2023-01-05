@@ -1,6 +1,6 @@
 package hminepos.controller;
 
-import hminepos.database.SqliteHelper;
+import hminepos.database.DatabaseHelper;
 import hminepos.model.CustomerModel;
 import hminepos.model.PurchasesModel;
 import hminepos.model.SalesModel;
@@ -102,7 +102,7 @@ public class SaleReportController implements Initializable {
         String strUser = cbUser.getValue();
         if (fetchFromDB) {
             // Fetch data from Database
-            salesData = SqliteHelper.getSalesData(strStart, strEnd);
+            salesData = DatabaseHelper.getSalesData(strStart, strEnd);
             // GROUP BY Java Stream API
             // For Vouchers
             List<String> voucherList = new ArrayList<>(salesData.stream().collect(Collectors.groupingBy(SalesModel::getVoucher)).keySet());
@@ -189,9 +189,9 @@ public class SaleReportController implements Initializable {
         dpEnd.setValue(LocalDate.now());
 
         cbCustomer.getItems().addAll(null, "Unknown");
-        cbCustomer.getItems().addAll(FXCollections.observableArrayList(SqliteHelper.getAllCustomers()).stream().map(CustomerModel::getCustomerId).toList());
+        cbCustomer.getItems().addAll(FXCollections.observableArrayList(DatabaseHelper.getAllCustomers()).stream().map(CustomerModel::getCustomerId).toList());
         cbUser.getItems().add(null);
-        cbUser.getItems().addAll(FXCollections.observableArrayList(SqliteHelper.getAllUsers().stream().map(UserModel::getUserId).toList()));
+        cbUser.getItems().addAll(FXCollections.observableArrayList(DatabaseHelper.getAllUsers().stream().map(UserModel::getUserId).toList()));
 
         cbVoucher.showingProperty().addListener(((observable, hidden, showing) -> {
             if (hidden) {
