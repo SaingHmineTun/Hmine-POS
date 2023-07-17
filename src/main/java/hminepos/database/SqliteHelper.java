@@ -22,8 +22,8 @@ public class SqliteHelper {
 
         // sqlite driver
         Class.forName("org.sqlite.JDBC");
-        // database path, if it's a new database
-        con = DriverManager.getConnection("jdbc:sqlite:" + System.getProperty("user.dir") + "\\HminePOS.db");
+        // database path, Add
+        con = DriverManager.getConnection("jdbc:sqlite:" + System.getProperty("user.dir") + "\\app\\HminePOS.db");
 
     }
 
