@@ -1,6 +1,5 @@
 package hminepos.database;
 
-import hminepos.Main;
 import hminepos.helper.Type;
 import hminepos.helper.Utils;
 import hminepos.model.*;
@@ -23,9 +22,8 @@ public class SqliteHelper {
 
         // sqlite driver
         Class.forName("org.sqlite.JDBC");
-        String pathToDB = Main.class.getResource("/assets/HminePOS.db").getPath();
         // database path, if it's a new database
-        con = DriverManager.getConnection("jdbc:sqlite:" + pathToDB);
+        con = DriverManager.getConnection("jdbc:sqlite:" + System.getProperty("user.dir") + "\\HminePOS.db");
 
     }
 
