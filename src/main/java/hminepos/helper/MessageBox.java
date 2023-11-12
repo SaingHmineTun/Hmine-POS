@@ -82,11 +82,6 @@ public class MessageBox {
         Message.setFont(font);
     }
 
-    public MessageBox typeError() {
-        messageBox.alertType.setImage(new Image("/icons/72coder.png"));
-        return messageBox;
-    }
-
     public void setMessageListener(MessageBoxListener listener) {
         this.listener = listener;
     }

@@ -74,7 +74,7 @@
 }
 
 #login-bg {
-    -fx-background-image: url("login-bg.jpg");
+    -fx-background-image: url("../images/login-bg.jpg");
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
