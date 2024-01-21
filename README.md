@@ -1,6 +1,5 @@
 # Hmine POS
-#### Video Demo : https://youtu.be/AiUhKn_DYSA
-**Final Project for CS50**
+**Final Project for Diploma in Software Engineering from Y-Max University**
 
 This software is developed using JavaFX. Therefore, any computers that can run Java (installed JDK or JRE) can run this software.
 
