@@ -96,7 +96,6 @@ public class RegisterUserController implements Initializable {
 
         // Password and Confirm Password must be equal
         if (!pfCPassword.getText().equals(pfPassword.getText())) {
-            System.out.println(pfCPassword.getText() + " : " + pfPassword.getText());
             showLabelStatus("Password do not match!");
             return;
         }

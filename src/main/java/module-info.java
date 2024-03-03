@@ -9,6 +9,7 @@ module it.saimao.hminepos {
     requires MaterialFX;
     requires java.desktop;
     requires password4j;
+    requires org.apache.commons.io;
 
     exports hminepos;
     opens hminepos to javafx.fxml;

@@ -101,7 +101,6 @@ public class SalesController implements Initializable {
             sale.setCreatedAt(createdAt);
             sale.setCreatedBy(Utils.getCurrentUserId());
             sale.setCustomerId(cbCustomerId.getValue() == null ? "" : cbCustomerId.getValue().getCustomerId());
-            System.out.println(sale);
             // #1 Subtract quantity from products table
             if (SqliteHelper.subtractProducts(sale))
                 // #2 Add the record to the sales table

@@ -94,7 +94,6 @@ public class SaleReportController implements Initializable {
     }
 
     private void showData(boolean fetchFromDB) {
-        System.out.println("Show Data");
         String strStart = dpStart.getValue().atStartOfDay().toString();
         String strEnd = dpEnd.getValue().atTime(LocalTime.MAX).toString();
         String strVoucher = cbVoucher.getValue();
@@ -196,7 +195,6 @@ public class SaleReportController implements Initializable {
         cbVoucher.showingProperty().addListener(((observable, hidden, showing) -> {
             if (hidden) {
                 showData(false);
-                System.out.println("User Filter");
             }
         }));
 
@@ -204,7 +202,6 @@ public class SaleReportController implements Initializable {
         cbCustomer.showingProperty().addListener((observable, hidden, showing) -> {
             if (hidden) {
                 showData(false);
-                System.out.println("Customer Filter");
             }
         });
 
@@ -212,17 +209,14 @@ public class SaleReportController implements Initializable {
         cbUser.showingProperty().addListener((observable, hidden, showing) -> {
             if (hidden) {
                 showData(false);
-                System.out.println("User Filter");
             }
         });
 
         dpStart.setOnAction(event -> {
             showData(true);
-            System.out.println("Date Start Filter");
         });
         dpEnd.setOnAction(event -> {
             showData(true);
-            System.out.println("Date End Filter");
         });
 
 

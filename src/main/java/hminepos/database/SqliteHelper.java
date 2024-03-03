@@ -1,11 +1,17 @@
 package hminepos.database;
 
+import hminepos.Main;
 import hminepos.helper.Type;
 import hminepos.helper.Utils;
 import hminepos.model.*;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,13 +23,30 @@ import java.util.List;
 public class SqliteHelper {
 
     private static Connection con;
+    private static String dbPath;
 
-    private static void getConnection() throws SQLException, ClassNotFoundException {
+    public static void initDb() throws IOException {
+        dbPath = System.getProperty("user.home") + File.separator + "HminePOS" + File.separator + "HminePOS.db";
+        if (Files.notExists(Path.of(dbPath))) {
+            // Get the resource as a URL
+            URL resourceUrl = Main.class.getResource("/db/HminePOS.db");
 
+            // Check if resource exists
+            if (resourceUrl != null) {
+                // Copy the resource to the target path
+                FileUtils.copyURLToFile(resourceUrl, new File(dbPath));
+            } else {
+                throw new IOException("Resource not found: " + dbPath);
+            }
+        }
+    }
+
+    private static void getConnection() throws SQLException, ClassNotFoundException, IOException {
         // sqlite driver
         Class.forName("org.sqlite.JDBC");
+        if (Files.notExists(Path.of(dbPath))) initDb();
         // database path, Add
-        con = DriverManager.getConnection("jdbc:sqlite:" + System.getProperty("user.dir") + "\\app\\HminePOS.db");
+        con = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 
     }
 
@@ -52,7 +75,7 @@ public class SqliteHelper {
             res.close();
             prep.close();
             con.close();
-        } catch (SQLException | ClassNotFoundException throwable) {
+        } catch (SQLException | ClassNotFoundException | IOException throwable) {
             throwable.printStackTrace();
         }
         return allUsers;
@@ -77,9 +100,7 @@ public class SqliteHelper {
             addedRow = pstmt.executeUpdate();
             pstmt.close();
             con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return addedRow > 0;
@@ -106,9 +127,7 @@ public class SqliteHelper {
             updatedRow = pstmt.executeUpdate();
             pstmt.close();
             con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return updatedRow > 0;
@@ -136,7 +155,7 @@ public class SqliteHelper {
             res.close();
             prep.close();
             con.close();
-        } catch (SQLException | ClassNotFoundException throwables) {
+        } catch (SQLException | ClassNotFoundException | IOException throwables) {
             throwables.printStackTrace();
         }
         return user;
@@ -170,7 +189,7 @@ public class SqliteHelper {
             res.close();
             prep.close();
             con.close();
-        } catch (SQLException | ClassNotFoundException throwable) {
+        } catch (SQLException | ClassNotFoundException | IOException throwable) {
             throwable.printStackTrace();
         }
         return allCustomers;
@@ -197,9 +216,7 @@ public class SqliteHelper {
             addedRow = pstmt.executeUpdate();
             pstmt.close();
             con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return addedRow > 0;
@@ -226,9 +243,7 @@ public class SqliteHelper {
             updatedRow = pstmt.executeUpdate();
             pstmt.close();
             con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return updatedRow > 0;
@@ -263,7 +278,7 @@ public class SqliteHelper {
             res.close();
             prep.close();
             con.close();
-        } catch (SQLException | ClassNotFoundException throwable) {
+        } catch (SQLException | ClassNotFoundException | IOException throwable) {
             throwable.printStackTrace();
         }
         return allSuppliers;
@@ -290,9 +305,7 @@ public class SqliteHelper {
             addedRow = pstmt.executeUpdate();
             pstmt.close();
             con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return addedRow > 0;
@@ -319,9 +332,7 @@ public class SqliteHelper {
             updatedRow = pstmt.executeUpdate();
             pstmt.close();
             con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return updatedRow > 0;
@@ -353,7 +364,7 @@ public class SqliteHelper {
             res.close();
             prep.close();
             con.close();
-        } catch (SQLException | ClassNotFoundException throwable) {
+        } catch (SQLException | ClassNotFoundException | IOException throwable) {
             throwable.printStackTrace();
         }
         return allProducts;
@@ -380,9 +391,7 @@ public class SqliteHelper {
             addedRow = pstmt.executeUpdate();
             pstmt.close();
             con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return addedRow > 0;
@@ -409,9 +418,7 @@ public class SqliteHelper {
             updatedRow = pstmt.executeUpdate();
             pstmt.close();
             con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return updatedRow > 0;
@@ -441,7 +448,7 @@ public class SqliteHelper {
             res.close();
             prep.close();
             con.close();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
         return result;
@@ -466,9 +473,7 @@ public class SqliteHelper {
             pstmt.setString(7, sale.getCreatedAt());
             addedRow = pstmt.executeUpdate();
             pstmt.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return addedRow > 0;
@@ -500,9 +505,7 @@ public class SqliteHelper {
             updatedRow = pstmt.executeUpdate();
             pstmt.close();
             con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return updatedRow > 0;
@@ -526,9 +529,7 @@ public class SqliteHelper {
             updatedRow = pstmt.executeUpdate();
             pstmt.close();
             con.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return updatedRow > 0;
@@ -553,9 +554,7 @@ public class SqliteHelper {
             pstmt.setString(7, purchase.getCreatedAt());
             addedRow = pstmt.executeUpdate();
             pstmt.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return addedRow > 0;
@@ -587,7 +586,7 @@ public class SqliteHelper {
             res.close();
             prep.close();
             con.close();
-        } catch (SQLException | ClassNotFoundException throwable) {
+        } catch (SQLException | ClassNotFoundException | IOException throwable) {
             throwable.printStackTrace();
         }
         return salesModels;
@@ -619,7 +618,7 @@ public class SqliteHelper {
             res.close();
             prep.close();
             con.close();
-        } catch (SQLException | ClassNotFoundException throwable) {
+        } catch (SQLException | ClassNotFoundException | IOException throwable) {
             throwable.printStackTrace();
         }
         return purchasesModels;

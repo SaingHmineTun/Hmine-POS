@@ -45,6 +45,9 @@ public class LoginController implements Initializable {
     private Stage stage;
 
     public void handleLogin(ActionEvent actionEvent) throws IOException {
+
+        SqliteHelper.initDb();
+
         String userId = tfUserName.getText();
         String password = pfPassword.getText();
 

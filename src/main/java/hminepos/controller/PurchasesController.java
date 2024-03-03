@@ -227,7 +227,6 @@ public class PurchasesController implements Initializable {
                     tfSupplierName.setText(cbSupplierId.getValue().getSupplierName());
                 else
                     tfSupplierName.clear();
-                System.out.println("Handle Supplier ID");
             }
         });
     }
@@ -263,7 +262,6 @@ public class PurchasesController implements Initializable {
             purchase.setCreatedAt(createdAt);
             purchase.setCreatedBy(Utils.getCurrentUserId());
             purchase.setSupplierId(cbSupplierId.getValue() == null ? "" : cbSupplierId.getValue().getSupplierId());
-            System.out.println(purchase);
             // #1 Subtract quantity from products table
             if (SqliteHelper.increaseProduct(purchase))
                 // #2 Add the record to the sales table
