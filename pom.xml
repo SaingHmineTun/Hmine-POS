@@ -86,7 +86,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>hminepos.Main</mainClass>
+                            <mainClass>it.saimao.hminepos.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
@@ -115,6 +115,18 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version><configuration>
+                <archive>
+                    <manifest>
+                        <mainClass>hminepos.Main</mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+            </plugin>
+
         </plugins>
     </build>
     <repositories>
