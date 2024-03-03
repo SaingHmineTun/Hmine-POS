@@ -2,12 +2,12 @@ module it.saimao.hminepos {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.swing;
+    requires java.desktop;
 
     requires org.controlsfx.controls;
     requires org.xerial.sqlitejdbc;
     requires com.jfoenix;
     requires MaterialFX;
-    requires java.desktop;
     requires password4j;
     requires org.apache.commons.io;
 
